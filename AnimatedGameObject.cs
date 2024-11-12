@@ -42,5 +42,6 @@ namespace Pacman
             if (_currentClip != _animationClips[name])
                 _currentClip = _animationClips[name];
         }
+
     }
 }

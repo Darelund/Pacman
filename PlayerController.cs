@@ -16,8 +16,29 @@ namespace Pacman
         private Vector2 destination;
         bool moving = false;
 
+        private float _health = 3;
+        public float Health
+        {
+            get => _health;
+        }
+        public bool IsImmune { get; private set; } = false;
+        private bool _inAttackMode = false;
+        private bool _isActive = true;
+
+        private static PlayerController _instance;
+        public static PlayerController Instance
+        {
+            get
+            {
+                if (_instance != null)
+                    return _instance;
+                else
+                    return null;
+            }
+        }
         public PlayerController(Texture2D texture, Vector2 position, Color color, float rotation, float size, float layerDepth, Vector2 origin, Dictionary<string, AnimationClip> animationClips) : base(texture, position, color, rotation, size, layerDepth, origin, animationClips)
         {
+            _instance = this;
         }
 
         public override void Update(GameTime gameTime)
@@ -48,6 +69,10 @@ namespace Pacman
             }
 
             base.Update(gameTime);
+        }
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            base.Draw(spriteBatch);
         }
         private Vector2 GetNewDirection()
         {
@@ -86,9 +111,48 @@ namespace Pacman
             }
             return direction;
         }
-        public override void Draw(SpriteBatch spriteBatch)
+        
+        public void TakeDamage(int amount)
         {
-            base.Draw(spriteBatch);
+            //Maybe add thís back later
+            // if(!IsImmune)
+            _health -= amount;
+            if (_health <= 0)
+            {
+                _isActive = false;
+                HighScore.UpdateScore(GameManager.Name, ScoreManager.PlayerScore, LevelManager.LevelIndex);
+                string deathSound = "DeathSound";
+                AudioManager.PlaySoundEffect(deathSound);
+                ScoreManager.ResetScore();
+            }
+            Debug.WriteLine(_health);
+        }
+        public override void OnCollision(GameObject gameObject)
+        {
+            if (!_isActive) return;
+            if (gameObject is EnemyController)
+            {
+                // var enemsy = (EnemyController)gameObject;
+                if (!IsImmune)
+                {
+                    Debug.WriteLine("Taking damage");
+                    float volume = 0.5f;
+                    string damageSound = "FlameDamage";
+                    AudioManager.PlaySoundEffect(damageSound, volume);
+                    float flashTime = 2f;
+                    Color flashColor = Color.White;
+                    var flash = new FlashEffect(ResourceManager.GetEffect("FlashEffect"), flashTime, this, flashColor);
+                    GameManager.AddFlashEffect(flash);
+                    IsImmune = true;
+                    flash.OnFlashing += ImmuneHandler;
+                    //YEs memory leak, so what??? Or is it?
+                    TakeDamage(1);
+                }
+            }
+        }
+        public void ImmuneHandler(bool immune)
+        {
+            IsImmune = immune;
         }
     }
 }

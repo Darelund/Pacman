@@ -35,5 +35,6 @@ namespace Pacman
         {
             spriteBatch.Draw(Texture, Position, null, Color, Rotation, Origin, Size, SpriteEffect, LayerDepth);
         }
+        public abstract void OnCollision(GameObject gameObject);
     }
 }

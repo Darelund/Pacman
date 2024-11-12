@@ -11,11 +11,11 @@ namespace Pacman
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        private const string _textures = "ghost,pacman,tiles";
-        private const string _sounds = "";
-        private const string _music = "";
-        private const string _font = "";
-        private const string _effects = "";
+        private const string _textures = "ghost,pacman,tiles,pacman-character-yellow,pacman-character-pink,pacman-heart,empty";
+        private const string _sounds = "";//"DeathSound,HardPop,FlameDamage,CoinPickupSound";
+        private const string _music = "BackgroundMusic";
+        private const string _font = "GameText";
+        private const string _effects = "FlashEffect";
 
         private PlayerController _playerController;
         public Game1()
@@ -37,6 +37,7 @@ namespace Pacman
             _graphics.PreferredBackBufferWidth = fixedWidth;
             _graphics.ApplyChanges();
 
+            GameManager.SetUp(Window, Content, GraphicsDevice);
             base.Initialize();
         }
 
@@ -61,15 +62,17 @@ namespace Pacman
 
             _playerController = new PlayerController(ResourceManager.GetTexture("pacman"), new Vector2(300, 300), Color.White, 0f, 1f, 0f, new Vector2(20, 20), playerAnimations);
 
-            // TODO: use this.Content to load your game content here
+
+            GameManager.ContentLoad();
         }
 
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            InputManager.Update();
-            _playerController.Update(gameTime);
+            //InputManager.Update();
+            //_playerController.Update(gameTime);
+            GameManager.Update(gameTime);
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -77,14 +80,15 @@ namespace Pacman
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
 
-            _spriteBatch.Begin();
-            _playerController.Draw(_spriteBatch);
-            _spriteBatch.End();
+            //_spriteBatch.Begin();
+            //_playerController.Draw(_spriteBatch);
+            //_spriteBatch.End();
             // TODO: Add your drawing code here
 
+            GameManager.Draw(_spriteBatch);
             base.Draw(gameTime);
         }
     }

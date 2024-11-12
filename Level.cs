@@ -128,9 +128,9 @@ namespace Pacman
        // public abstract void SetTarget();
 
 
-        public static List<(char TileName, Texture2D tileTexture, TileType Type, Color tileColor)> ReadTileDataFromFile(string fileName)
+        public static List<(bool isTile, char TileName, Texture2D tileTexture, TileType Type, Color tileColor)> ReadTileDataFromFile(string fileName)
         {
-            List<(char, Texture2D, TileType, Color)> tileData = new List<(char, Texture2D, TileType, Color)>();
+            List<(bool, char, Texture2D, TileType, Color)> tileData = new List<(bool, char, Texture2D, TileType, Color)>();
 
             using (StreamReader reader = new StreamReader(fileName))
             {
@@ -156,7 +156,7 @@ namespace Pacman
                         };
 
                         // Add the tile to the list, converting the texture name to a Texture2D object
-                        tileData.Add((tileName, ResourceManager.GetTexture(textureName), type, color));
+                        tileData.Add((true, tileName, ResourceManager.GetTexture(textureName), type, color));
                     }
                 }
             }

@@ -31,7 +31,7 @@ namespace Pacman
         public static GameWindow Window;
         public static ContentManager Content;
         public static GraphicsDevice Device;
-        public static string Name { get; set; }
+        public static Level Level { get; } = new();
         private static SceneSwitcher _sceneSwitcher;
 
 
@@ -43,15 +43,15 @@ namespace Pacman
             Window = window;
             Content = content;
             Device = device;
-            _sceneSwitcher = new SceneSwitcher(Window, Device);
+           // _sceneSwitcher = new SceneSwitcher(Window, Device);
         }
         public static void ContentLoad()
         {
             UIManager.LoadContent();
             AudioManager.LoadContent();
             HighScore.LoadScores();
-            LevelManager.CreateLevels();
-            LevelManager.SpecificLevel(0, false);
+           // Level.CreateLevel();
+           // Level.SpecificLevel(0, false);
         }
 
 
@@ -61,7 +61,7 @@ namespace Pacman
             {
                 case GameState.MainMenu:
                     InputManager.Update();
-                    LevelManager.Update(gameTime);
+                   // Level.Update(gameTime);
                     UIManager.Update(gameTime);
                     foreach (var gameObject in GameObjects)
                     {
@@ -75,7 +75,7 @@ namespace Pacman
                 case GameState.Playing:
                     InputManager.Update();
                     UIManager.Update(gameTime);
-                    LevelManager.Update(gameTime);
+                    Level.Update(gameTime);
                     foreach (var gameObject in GameObjects)
                     {
                         gameObject.Update(gameTime);
@@ -88,7 +88,7 @@ namespace Pacman
                                 OnGameOver?.Invoke(Color.Black, GameState.GameOver);
                             }
 
-                            if (LevelManager.GetCurrentLevel.LevelCompleted)
+                            if (Level.LevelCompleted)
                             {
                                 OnWin?.Invoke(Color.Green, GameState.Victory);
                             }
@@ -110,16 +110,16 @@ namespace Pacman
                     UIManager.Update(gameTime);
                     break;
                 case GameState.Victory:
-                    LevelManager.NextLevel(true);
-                    LevelManager.SpecificLevel(5, true);
+                    //LevelManager.NextLevel(true);
+                    //LevelManager.SpecificLevel(5, true);
                     break;
                 case GameState.Restart:
-                    LevelManager.Restart();
+                    //LevelManager.Restart();
                     break;
                 case GameState.Exit:
                     break;
             }
-            _sceneSwitcher.Update(gameTime);
+           // _sceneSwitcher.Update(gameTime);
         }
         public static void Draw(SpriteBatch spriteBatch)
         {
@@ -127,7 +127,7 @@ namespace Pacman
             switch (CurrentGameState)
             {
                 case GameState.MainMenu:
-                    LevelManager.Draw(spriteBatch);
+                    //Level.Draw(spriteBatch);
                     UIManager.Draw(spriteBatch);
                     foreach (var gameObject in GameObjects)
                     {
@@ -139,7 +139,7 @@ namespace Pacman
                     break;
                 case GameState.Playing:
 
-                    LevelManager.Draw(spriteBatch);
+                    Level.Draw(spriteBatch);
                     UIManager.Draw(spriteBatch);
 
                     foreach (var gameObject in GameObjects)
@@ -178,7 +178,7 @@ namespace Pacman
                 case GameState.Exit:
                     break;
             }
-            _sceneSwitcher.Draw(spriteBatch);
+          //  _sceneSwitcher.Draw(spriteBatch);
             spriteBatch.End();
         }
         //public static void AddGameObject(GameObject gameObject)

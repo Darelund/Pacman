@@ -24,6 +24,7 @@ namespace Pacman
         public bool IsImmune { get; private set; } = false;
         private bool _inAttackMode = false;
         private bool _isActive = true;
+        public string Name { get; set; }
 
         private static PlayerController _instance;
         public static PlayerController Instance
@@ -120,7 +121,7 @@ namespace Pacman
             if (_health <= 0)
             {
                 _isActive = false;
-                HighScore.UpdateScore(GameManager.Name, ScoreManager.PlayerScore, LevelManager.LevelIndex);
+               // HighScore.UpdateScore(Name, ScoreManager.PlayerScore, LevelManager.LevelIndex);
                 string deathSound = "DeathSound";
                 AudioManager.PlaySoundEffect(deathSound);
                 ScoreManager.ResetScore();

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,16 +15,13 @@ namespace Pacman
         {
             switch (objectType)
             {
-                case "EnemyController":
+                case "E":
                     Debug.WriteLine("An enemy is created(Factory)");
                     return CreateEnemyController(objectData);
-                case "PlayerController":
+                case "P":
                     return CreatePlayerController(objectData);
-                case "PickUp":
+                case "Í":
                     return CreatePickUp(objectData);
-                case "DonkeyKong":
-                    Debug.WriteLine("Donkey Kong is created(Factory)");
-                    return CreateDonkeyKong(objectData);
                 default:
                     Debug.WriteLine("Unknown object type: " + objectType);
                     return null;
@@ -161,7 +159,6 @@ namespace Pacman
             return new PlayerController(
                 ResourceManager.GetTexture(sprite),
                 position,
-                speed,
                 color,
                 rotation,
                 size,
@@ -266,87 +263,6 @@ namespace Pacman
                 type,
                 minScore,
                 maxScore
-            );
-        }
-        private DonkeyKong CreateDonkeyKong(List<string> data)
-        {
-            string sprite = data[0];
-            string[] positionParts = data[1].Split(',');
-            float xPos = float.Parse(positionParts[0].Trim());
-            float yPos = float.Parse(positionParts[1].Trim());
-            Vector2 position = new Vector2(xPos, yPos);
-
-            float speed = float.Parse(data[2]);
-            string colorName = data[3].Trim();
-            Color color = colorName switch
-            {
-                "white" => Color.White,
-                "red" => Color.Red,
-                "blue" => Color.Blue,
-                "green" => Color.Green,
-                _ => Color.White
-            };
-
-            float rotation = float.Parse(data[4].Trim());
-            float size = float.Parse(data[5].Trim());
-            float layerDepth = float.Parse(data[6].Trim());
-
-            string[] originParts = data[7].Split(',');
-            xPos = float.Parse(originParts[0].Trim());
-            yPos = float.Parse(originParts[1].Trim());
-            Vector2 origin = new Vector2(xPos, yPos);
-
-            int numberOfAnimatedClips = 0;
-            for (int i = 8; i < data.Count; i++)
-            {
-                if (data[i].Contains(':'))
-                {
-                    numberOfAnimatedClips++;
-                    Debug.WriteLine(numberOfAnimatedClips);
-                }
-                else
-                {
-                    break;
-                }
-            }
-            var animationClips = new Dictionary<string, AnimationClip>();
-            for (int i = 8; i < 8 + numberOfAnimatedClips; i++)
-            {
-                string animationData = data[i];
-                if (!string.IsNullOrWhiteSpace(animationData))
-                {
-                    string[] animationParts = animationData.Split(':');
-                    string animationName = animationParts[0].Trim();
-
-                    string[] rectsAndSpeed = animationParts[1].Split(';');
-                    string[] rectStrings = rectsAndSpeed[0].Split('|');
-
-                    Rectangle[] frames = rectStrings.Select(rectStr =>
-                    {
-                        string[] rectComponents = rectStr.Split(',');
-                        int rectX = int.Parse(rectComponents[0].Trim());
-                        int rectY = int.Parse(rectComponents[1].Trim());
-                        int rectWidth = int.Parse(rectComponents[2].Trim());
-                        int rectHeight = int.Parse(rectComponents[3].Trim());
-
-                        return new Rectangle(rectX, rectY, rectWidth, rectHeight);
-                    }).ToArray();
-
-                    float animationSpeed = float.Parse(rectsAndSpeed[1].Trim());
-
-                    animationClips[animationName] = new AnimationClip(frames, animationSpeed);
-                }
-            }
-            return new DonkeyKong(
-                ResourceManager.GetTexture(sprite),
-                position,
-                speed,
-                color,
-                rotation,
-                size,
-                layerDepth,
-                origin,
-                animationClips
             );
         }
     }

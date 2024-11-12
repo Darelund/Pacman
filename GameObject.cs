@@ -18,6 +18,7 @@ namespace Pacman
         protected float LayerDepth;
         protected Vector2 Origin;
         protected SpriteEffects SpriteEffect;
+        public abstract Rectangle Collision { get; }
 
         public GameObject(Texture2D texture, Vector2 position, Color color, float rotation, float size, float layerDepth, Vector2 origin)
         {

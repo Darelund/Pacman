@@ -13,7 +13,7 @@ namespace Pacman
         protected Dictionary<string, AnimationClip> _animationClips;
         protected AnimationClip _currentClip;
         private float _deltaTime;
-        public virtual Rectangle Collision
+        public override Rectangle Collision
         {
             get
             {

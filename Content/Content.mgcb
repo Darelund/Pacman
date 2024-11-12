@@ -19,12 +19,42 @@
 /processorParam:DebugMode=Auto
 /build:Effect/FlashEffect.fx
 
-#begin Fonts/File.spritefont
+#begin Fonts/GameText.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
-/build:Fonts/File.spritefont
+/build:Fonts/GameText.spritefont
+
+#begin Music/BackgroundMusic.wav
+/importer:WavImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/BackgroundMusic.wav
+
+#begin SoundEffects/CoinPickupSound.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundEffects/CoinPickupSound.wav
+
+#begin SoundEffects/DeathSound.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundEffects/DeathSound.wav
+
+#begin SoundEffects/FlameDamage.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundEffects/FlameDamage.wav
+
+#begin SoundEffects/HardPop.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundEffects/HardPop.wav
 
 #begin Textures/empty.png
 /importer:TextureImporter
@@ -49,6 +79,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/ghost.png
+
+#begin Textures/pacman-character-pink.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/pacman-character-pink.png
+
+#begin Textures/pacman-character-yellow.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/pacman-character-yellow.png
 
 #begin Textures/pacman-heart.png
 /importer:TextureImporter

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -31,7 +32,7 @@ namespace Pacman
 
         public event Action<Item> OnExpired;
 
-        public Item(Texture2D texture, Vector2 position, float speed, Color color, float rotation, float size, float layerDepth, Vector2 origin, Dictionary<string, AnimationClip> animationClips, ItemType type, int minScore, int maxScore) : base(texture, position, speed, color, rotation, size, layerDepth, origin, animationClips)
+        public Item(Texture2D texture, Vector2 position, float speed, Color color, float rotation, float size, float layerDepth, Vector2 origin, Dictionary<string, AnimationClip> animationClips, ItemType type, int minScore, int maxScore) : base(texture, position, color, rotation, size, layerDepth, origin, animationClips)
         {
             Type = type;
             _minScore = minScore;
@@ -47,12 +48,12 @@ namespace Pacman
                 Random random = new Random();
                 var randomScore = random.Next(_minScore, _maxScore);
 
-                PlayerController playerInventory = (PlayerController)gameObject;
-                playerInventory.Inventory.Items.Add(this);
-                state = ItemState.usingState;
+               // PlayerController playerInventory = (PlayerController)gameObject;
+               // playerInventory.Inventory.Items.Add(this);
+               // state = ItemState.usingState;
                 ScoreManager.UpdateScore(randomScore);
-                int resetRotation = 0;
-                Rotation = resetRotation;
+                //int resetRotation = 0;
+                //Rotation = resetRotation;
                 AudioManager.PlaySoundEffect("CoinPickupSound");
             }
            // GameManager.GameObjects.Remove(this);

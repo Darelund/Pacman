@@ -31,7 +31,7 @@ namespace Pacman
             foreach (string soundEffect in soundEffects.Split(','))
             {
                 if (soundEffect == "") continue;
-                SoundEffect sF = content.Load<SoundEffect>($"SoundEffect/{soundEffect.Trim()}");
+                SoundEffect sF = content.Load<SoundEffect>($"SoundEffects/{soundEffect.Trim()}");
                 sF.Name = soundEffect.Trim();
                 SoundEffects.Add(sF);
             }

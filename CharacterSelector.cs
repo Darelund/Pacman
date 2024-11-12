@@ -34,11 +34,11 @@ namespace Pacman
 
         private static readonly Color _defaultUIColor = Color.White;
         private const float _UISize1 = 0.8f;
-        private const float _UISize2 = 6f;
-        private const float _UISize3 = 6f;
+        private const float _UISize2 = 3f;
+        private const float _UISize3 = 3f;
         private const float UIText1layedepth = 0.9f;
-        private static readonly Rectangle _UIImage1Rec = new Rectangle(256, 1, 16, 16);
-        private static readonly Rectangle _UIImage2Rec = new Rectangle(256, 18, 16, 16);
+        private static readonly Rectangle _UIImage1Rec = new Rectangle(0, 0, 39, 39);
+        private static readonly Rectangle _UIImage2Rec = new Rectangle(0, 0, 39, 39);
         private const float UIImagelayedepth = 0.9f;
 
 
@@ -49,8 +49,8 @@ namespace Pacman
             _SelectCharacterElements = new List<UIElement>
             {
                 new UIText(ResourceManager.GetSpriteFont(_fontText), _selectText, _fontpos1, _defaultUIColor, _UISize1, _defaultOrigin, UIText1layedepth),
-                new UIImage(ResourceManager.GetTexture("mario-pauline-transparent"), _UIImagepos1, _defaultUIColor, _UISize2, _defaultOrigin, _UIImage1Rec, UIImagelayedepth),
-                new UIImage(ResourceManager.GetTexture("mario-pauline-transparent"), _UIImagepos2, _defaultUIColor, _UISize3, _defaultOrigin, _UIImage2Rec, UIImagelayedepth),
+                new UIImage(ResourceManager.GetTexture("pacman-character-yellow"), _UIImagepos1, _defaultUIColor, _UISize2, _defaultOrigin, _UIImage1Rec, UIImagelayedepth),
+                new UIImage(ResourceManager.GetTexture("pacman-character-pink"), _UIImagepos2, _defaultUIColor, _UISize3, _defaultOrigin, _UIImage2Rec, UIImagelayedepth),
 
                 new Button(ResourceManager.GetSpriteFont(_fontText), _defaultButtonColors, _button1Pos, _defaultOrigin, _buttonValue1, _buttonMethod, _buttonDisplayText, _buttonDefaultSize, _buttonDefaultLayderDepth),
                 new Button(ResourceManager.GetSpriteFont(_fontText), _defaultButtonColors, _button2Pos, _defaultOrigin, _buttonValue2, _buttonMethod, _buttonDisplayText, _buttonDefaultSize, _buttonDefaultLayderDepth)
@@ -92,23 +92,24 @@ namespace Pacman
             int startScore = 0;
             int startLevel = 0;
             HighScore.UpdateScore(_textInputManager.InputText, startScore, startLevel);
-            GameManager.Name = _textInputManager.InputText;
+            PlayerController.Instance.Name = _textInputManager.InputText;
             if (selectedOption is int selection)
             {
                 switch (selection)
                 {
                     case 1:
-                        GameFiles.Character.CHARACTER = "Content/MarioCharacter.txt";
+                        GameFiles.Character.CHARACTERCOLOR = "White";
                         break;
                     case 2:
-                        GameFiles.Character.CHARACTER = "Content/PaulineCharacter.txt";
+                        GameFiles.Character.CHARACTERCOLOR = "Pink";
                         break;
                     default:
                         break;
                 }
             }
-            LevelManager.NextLevel(true);
-            //GameManager.ChangeGameState(GameManager.GameState.Playing);
+            // LevelManager.NextLevel(true);
+            GameManager.Level.CreateLevel(GameFiles.Levels.LevelData.LevelFile, GameFiles.Levels.LevelData.LevelStartPosition, GameFiles.Levels.LevelData.TileData);
+            GameManager.ChangeGameState(GameManager.GameState.Playing);
         }
     }
 }

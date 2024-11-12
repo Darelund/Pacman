@@ -10,8 +10,8 @@ namespace Pacman
 {
     public enum TileType
     {
-        Walkable,
-        NonWalkable,
+        Wall,
+        Path
     }
     public class Tile
     {

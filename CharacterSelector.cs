@@ -108,7 +108,7 @@ namespace Pacman
                 }
             }
             // LevelManager.NextLevel(true);
-            GameManager.Level.CreateLevel(GameFiles.Levels.LevelData.LevelFile, GameFiles.Levels.LevelData.LevelStartPosition, GameFiles.Levels.LevelData.TileData);
+            GameManager.Level.ActivateLevel();
             GameManager.ChangeGameState(GameManager.GameState.Playing);
         }
     }

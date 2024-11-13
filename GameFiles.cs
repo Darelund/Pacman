@@ -27,7 +27,7 @@ namespace Pacman
             //public static readonly LevelConfig Level3 = new LevelConfig("Content/Level3Map.txt", defaultLevelStartPosition, Level.ReadTileDataFromFile(LevelType.REMOVETARGETLEVELS), "Content/GameObjectsLevel3.txt", playerStartPositionLevel3);
             //public static readonly LevelConfig Level4 = new LevelConfig("Content/Level4Map.txt", defaultLevelStartPosition, Level.ReadTileDataFromFile(LevelType.REMOVETARGETLEVELS), "Content/GameObjectsLevel4.txt", playerStartPositionLevel4);
             //public static readonly LevelConfig Level5 = new LevelConfig("Content/Level5Map.txt", bossLevelStartPosition, Level.ReadTileDataFromFile(LevelType.FALLINGPLATFORMSLEVELS), "Content/GameObjectsLevel5.txt", playerStartPositionLevel5);
-            public static readonly LevelConfig LevelData = new LevelConfig("Content/Map.txt", defaultLevelStartPosition, Level.ReadTileDataFromFile(ContentInLevel.CONTENTINLEVEL));
+            public static readonly LevelConfig LevelData = new LevelConfig("Content/Map.txt", defaultLevelStartPosition, Level.ReadTileDataFromFile(ContentInLevel.TILESINLEVEL), Level.ReadGameObjectDataFromFile(ContentInLevel.GAMEOBJECTSINLEVEL));
             //public static readonly LevelConfig LevelData = new LevelConfig("Content/Map.txt", defaultLevelStartPosition);
         }
         //public static class LevelType
@@ -40,7 +40,8 @@ namespace Pacman
         //}
         public static class ContentInLevel
         {
-            public const string CONTENTINLEVEL = "Content/LevelContentConfig.txt";
+            public const string TILESINLEVEL = "Content/LevelTilesConfig.txt";
+            public const string GAMEOBJECTSINLEVEL = "Content/LevelGameObjectsConfig.txt";
         }
         public static class Character
         {

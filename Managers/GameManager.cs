@@ -50,8 +50,6 @@ namespace Pacman
             UIManager.LoadContent();
             AudioManager.LoadContent();
             HighScore.LoadScores();
-           // Level.CreateLevel();
-           // Level.SpecificLevel(0, false);
         }
 
 

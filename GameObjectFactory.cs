@@ -20,7 +20,7 @@ namespace Pacman
                     return CreateEnemyController(objectData);
                 case "P":
                     return CreatePlayerController(objectData);
-                case "Í":
+                case "C":
                     return CreatePickUp(objectData);
                 default:
                     Debug.WriteLine("Unknown object type: " + objectType);

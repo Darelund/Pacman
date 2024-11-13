@@ -2,11 +2,13 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Pacman.GameFiles;
 
 namespace Pacman
 {
@@ -25,7 +27,10 @@ namespace Pacman
 
 
         //public List<GameObject> GameObjects = new List<GameObject>();
-
+        public void ActivateLevel()
+        {
+            CreateLevel(Levels.LevelData.LevelFile, Levels.LevelData.LevelStartPosition, Levels.LevelData.TileData, Levels.LevelData.GameObjectData);
+        }
 
         /// <summary>
         /// Creates a 2D grid level based on the file you give it. In the file each character represents one tile. 
@@ -33,20 +38,22 @@ namespace Pacman
         /// </summary>
         /// <param name="file"></param>
         /// <param name="tileTexture"></param>
-        public void CreateLevel(string file, Vector2 startPosition, List<(bool IsTile, char TileName, Texture2D tileTexture, TileType type, Color tileColor)> tileConfigurations)
+        public void CreateLevel(string file, Vector2 startPosition, List<(char TileName, Texture2D tileTexture, TileType type, Color tileColor, string SpriteCode)> tileConfigurations, List<char> GameObjectConfigurations)
         {
             List<string> result = FileManager.ReadFromFile(file);
             _startPosition = startPosition;
             _tiles = new Tile[result[0].Length, result.Count];
+
+            Vector2 size = new Vector2(40, 40);
             for (int i = 0; i < result.Count; i++)
             {
                 for (int j = 0; j < result[0].Length; j++)
                 {
                     foreach (var tileConfig in tileConfigurations)
                     {
-                        if (result[i][j] == tileConfig.TileName && tileConfig.IsTile)
+                        if (result[i][j] == tileConfig.TileName)
                         {
-                            _tiles[j, i] = new Tile(new Vector2(tileConfig.tileTexture.Width * j + startPosition.X, tileConfig.tileTexture.Height * i + startPosition.Y), tileConfig.tileTexture, tileConfig.type, tileConfig.tileColor, tileConfig.TileName);
+                            _tiles[j, i] = new Tile(new Vector2(size.X * j + startPosition.X, size.Y * i + startPosition.Y), tileConfig.tileTexture, tileConfig.type, tileConfig.tileColor, tileConfig.TileName, TileEditor.rectMap[tileConfig.SpriteCode]);
                             break;
                         }
                         else
@@ -56,14 +63,29 @@ namespace Pacman
                             TileType defaultTileType = TileType.Path;
                             Color defaultColor = Color.White;
                             char defaultName = 'p';
-                            _tiles[j, i] = new Tile(new Vector2(tileConfig.tileTexture.Width * j + startPosition.X, tileConfig.tileTexture.Height * i + startPosition.Y), ResourceManager.GetTexture(defaultTextureString), defaultTileType, defaultColor, defaultName);
+                            Rectangle _sourceRec = new Rectangle(0, 0, 39, 39);
+                            _tiles[j, i] = new Tile(new Vector2(size.X * j + startPosition.X, size.Y * i + startPosition.Y), ResourceManager.GetTexture(defaultTextureString), defaultTileType, defaultColor, defaultName, _sourceRec);
                         }
 
-                        if (result[i][j] == tileConfig.TileName && tileConfig.IsTile)
+                        foreach (char GameObjectName in GameObjectConfigurations)
                         {
-                            _tiles[j, i] = new Tile(new Vector2(tileConfig.tileTexture.Width * j + startPosition.X, tileConfig.tileTexture.Height * i + startPosition.Y), tileConfig.tileTexture, tileConfig.type, tileConfig.tileColor, tileConfig.TileName);
-                            break;
+                            if (result[i][j] == GameObjectName)
+                            {
+                                //Create a player
+                                break;
+                            }
+                            if (result[i][j] == GameObjectName)
+                            {
+                                //Create an enemy
+                                break;
+                            }
+                            if (result[i][j] == GameObjectName)
+                            {
+                                //Create a pickup
+                                break;
+                            }
                         }
+                        
                     }
                 }
             }
@@ -128,9 +150,9 @@ namespace Pacman
        // public abstract void SetTarget();
 
 
-        public static List<(bool isTile, char TileName, Texture2D tileTexture, TileType Type, Color tileColor)> ReadTileDataFromFile(string fileName)
+        public static List<(char TileName, Texture2D tileTexture, TileType Type, Color tileColor, string SpriteCode)> ReadTileDataFromFile(string fileName)
         {
-            List<(bool, char, Texture2D, TileType, Color)> tileData = new List<(bool, char, Texture2D, TileType, Color)>();
+            List<(char, Texture2D, TileType, Color, string)> tileData = new List<(char, Texture2D, TileType, Color, string)>();
 
             using (StreamReader reader = new StreamReader(fileName))
             {
@@ -138,7 +160,7 @@ namespace Pacman
                 {
                     string[] line = reader.ReadLine().Split(' ');
 
-                    if (line.Length == 4)
+                    if (line.Length == 5)
                     {
                         char tileName = line[0][0];
                         string textureName = line[1];
@@ -154,13 +176,27 @@ namespace Pacman
                             "DarkGreen" => Color.DarkGreen,
                             _ => Color.White // Default color if not found
                         };
-
+                        string spriteCodeName = line[4].Trim();
                         // Add the tile to the list, converting the texture name to a Texture2D object
-                        tileData.Add((true, tileName, ResourceManager.GetTexture(textureName), type, color));
+                        tileData.Add((tileName, ResourceManager.GetTexture(textureName), type, color, spriteCodeName));
                     }
                 }
             }
 
+            return tileData;
+        }
+        public static List<char> ReadGameObjectDataFromFile(string fileName)
+        {
+            List<char> tileData = new List<char>();
+
+            using (StreamReader reader = new StreamReader(fileName))
+            {
+                while (!reader.EndOfStream)
+                {
+                    string line = reader.ReadLine();
+                    tileData.Add(line[0]);
+                }
+            }
             return tileData;
         }
 

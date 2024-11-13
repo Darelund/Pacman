@@ -13,16 +13,21 @@ namespace Pacman
         public string LevelFile { get; }
         public Vector2 LevelStartPosition { get; }
        // public Vector2 PlayerStartPosition { get; }
-        public List<(bool isTile, char TileName, Texture2D tileTexture, TileType type, Color tileColor)> TileData { get; }
-      //  public string GameObjectsFile { get; }
+        public List<(char TileName, Texture2D tileTexture, TileType type, Color tileColor, string SpriteCode)> TileData { get; }
+        //  public string GameObjectsFile { get; }
+        public List<char> GameObjectData;
 
-        public LevelConfig(string levelFile, Vector2 levelStartPosition,
-            List<(bool isTile, char TileName, Texture2D tileTexture, TileType type, Color tileColor)> tileData
+        public LevelConfig
+            (string levelFile, 
+            Vector2 levelStartPosition,
+            List<(char TileName, Texture2D tileTexture, TileType type, Color tileColor, string SpriteCode)> tileData,
+            List<char> gameObjectData
            /*  string gameObjectsFile, Vector2 playerStartPosition*/)
         {
             LevelFile = levelFile;
             LevelStartPosition = levelStartPosition;
             TileData = tileData;
+            GameObjectData = gameObjectData;
            // GameObjectsFile = gameObjectsFile;
           //  PlayerStartPosition = playerStartPosition;
         }

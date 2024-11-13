@@ -21,13 +21,15 @@ namespace Pacman
         public char Name { get; set; }
         private Color _color;
         private const float _FallSpeed = 90f;
-        public Tile(Vector2 pos, Texture2D texture, TileType type, Color color, char name)
+        private Rectangle _sourceRec;
+        public Tile(Vector2 pos, Texture2D texture, TileType type, Color color, char name, Rectangle source)
         {
             Pos = pos;
             _texture = texture;
             Type = type;
             _color = color;
             Name = name;
+            _sourceRec = source;
         }
         public void Update(GameTime gameTime)
         {
@@ -35,7 +37,7 @@ namespace Pacman
         }
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, Pos, null, _color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0.9f);
+            spriteBatch.Draw(_texture, Pos, _sourceRec, _color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0.9f);
         }
         public void SwitchTile(Texture2D newTexture)
         {

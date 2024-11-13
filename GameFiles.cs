@@ -11,7 +11,7 @@ namespace Pacman
     {
         public static class Levels
         {
-            private static readonly Vector2 defaultLevelStartPosition = new Vector2(120, 120);
+            private static readonly Vector2 defaultLevelStartPosition = new Vector2(96, 96);
             //private static readonly Vector2 bossLevelStartPosition = new Vector2(0, 0);
 
             //private static readonly Vector2 playerStartPositionLevel1 = new Vector2(377, 377);

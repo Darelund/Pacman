@@ -11,19 +11,19 @@ namespace Pacman
 {
     public class GameObjectFactory
     {
-        public GameObject CreateGameObjectFromType(string objectType)
+        public GameObject CreateGameObjectFromType((char ObjectType, Vector2 Position) data)
         {
-            switch (objectType)
+            switch (data.ObjectType)
             {
                 //case "E":
                 //    Debug.WriteLine("An enemy is created(Factory)");
                 //    return CreateEnemyController(objectData);
-                case "P":
-                    return CreatePlayerController();
-                //case "C":
-                //    return CreatePickUp();
+                case 'P':
+                    return CreatePlayerController(data.Position);
+                case 'C':
+                    return CreateItem(data.Position);
                 default:
-                    Debug.WriteLine("Unknown object type: " + objectType);
+                    Debug.WriteLine("Unknown object type: " + data.ObjectType);
                     return null;
             }
         }
@@ -168,20 +168,31 @@ namespace Pacman
         //    );
         //}
 
-        private PlayerController CreatePlayerController()
+        private PlayerController CreatePlayerController(Vector2 data)
         {
-            string sprite = "pacman";
-            Vector2 position = new Vector2(300, 300);
+            string sprite = "pacman_white";
+            //Offset because character is bigger than tiles
+            Vector2 positionOffset = new Vector2(14.5f, 14.5f);
+            Vector2 position = data + positionOffset;
 
             //float speed = float.Parse(data[2]);
-            Color color = Color.White;
-
+            string colorName = GameFiles.Character.CHARACTERCOLOR;
+            Color color = colorName switch
+            {
+                "white" => Color.White,
+                "yellow" => Color.Yellow,
+                "red" => Color.Red,
+                "blue" => Color.Blue,
+                "green" => Color.Green,
+                "pink" => Color.HotPink,
+                _ => Color.White
+            };
             float rotation = 0;
-            float size = 1;
+            float size = 0.6f;
             float layerDepth = 0;
 
             
-            Vector2 origin = new Vector2(20, 20);
+            Vector2 origin = new Vector2(19.5f, 19.5f);
 
             Rectangle[] playerWalking =
              {
@@ -193,7 +204,7 @@ namespace Pacman
 
             Dictionary<string, AnimationClip> animationClips = new Dictionary<string, AnimationClip>()
             {
-                {"Idle",  new AnimationClip(playerWalking, 12f)}
+                {"Idle",  new AnimationClip(playerWalking, 7f)}
             };
 
             return new PlayerController(
@@ -208,101 +219,93 @@ namespace Pacman
             );
         }
 
-        private Item CreatePickUp(List<string> data)
+        private Item CreateItem(Vector2 data)
         {
-            string sprite = data[0];
-            string[] positionParts = data[1].Split(',');
-            float xPos = float.Parse(positionParts[0].Trim());
-            float yPos = float.Parse(positionParts[1].Trim());
-            Vector2 position = new Vector2(xPos, yPos);
+            Random ran = new Random();
 
-            float speed = float.Parse(data[2]);
-            string colorName = data[3].Trim();
-            Color color = colorName switch
-            {
-                "white" => Color.White,
-                "red" => Color.Red,
-                "blue" => Color.Blue,
-                "green" => Color.Green,
-                _ => Color.White
+            //Size (13, 14)
+            string sprite = "ghost";
+            
+            Rectangle[] itemRect =
+             {
+                new Rectangle(0, 0, 15, 15),
+                new Rectangle(1, 97, 13, 14),
+                new Rectangle(17, 97, 13, 14),
+                new Rectangle(32, 97, 13, 14),
+                new Rectangle(48, 97, 13, 14),
+                new Rectangle(65, 97, 13, 14),
+                new Rectangle(81, 97, 13, 14),
+                new Rectangle(97, 97, 13, 14),
+                new Rectangle(113, 97, 13, 14),
             };
+            Rectangle ranRect = itemRect[ran.Next(0, itemRect.Length)];
 
-            float rotation = float.Parse(data[4].Trim());
-            float size = float.Parse(data[5].Trim());
-            float layerDepth = float.Parse(data[6].Trim());
+            Vector2 positionOffset = new Vector2(11f, 11f);
 
-            string[] originParts = data[7].Split('.');
-            xPos = float.Parse(originParts[0].Trim());
-            yPos = float.Parse(originParts[1].Trim());
-            Vector2 origin = new Vector2(xPos, yPos);
+            Vector2 position = data + positionOffset;
 
-            int numberOfAnimatedClips = 0;
-            for (int i = 8; i < data.Count; i++)
+            Color color = Color.White;
+
+            float rotation = 0f;
+            float size = 1.5f;
+            float layerDepth = 0f;
+
+            Vector2 origin = new Vector2(6.5f, 7f);
+
+            int ranItem = ran.Next(0, 101);
+
+            if(ranItem >= 0 && ranItem < 50)
             {
-                if (data[i].Contains(':'))
-                {
-                    numberOfAnimatedClips++;
-                    Debug.WriteLine(numberOfAnimatedClips);
-                }
-                else
-                {
-                    break;
-                }
+                return new Candy(
+                    ResourceManager.GetTexture(sprite),
+                    position,
+                    ranRect,
+                    color,
+                    rotation,
+                    size,
+                    layerDepth,
+                    origin
+                );
             }
-            var animationClips = new Dictionary<string, AnimationClip>();
-            for (int i = 8; i < 8 + numberOfAnimatedClips; i++)
+            else if (ranItem >= 50 && ranItem < 70)
             {
-                string animationData = data[i];
-                if (!string.IsNullOrWhiteSpace(animationData))
-                {
-                    string[] animationParts = animationData.Split(':');
-                    string animationName = animationParts[0].Trim();
-
-                    string[] rectsAndSpeed = animationParts[1].Split(';');
-                    string[] rectStrings = rectsAndSpeed[0].Split('|');
-
-                    Rectangle[] frames = rectStrings.Select(rectStr =>
-                    {
-                        string[] rectComponents = rectStr.Split(',');
-                        int rectX = int.Parse(rectComponents[0].Trim());
-                        int rectY = int.Parse(rectComponents[1].Trim());
-                        int rectWidth = int.Parse(rectComponents[2].Trim());
-                        int rectHeight = int.Parse(rectComponents[3].Trim());
-
-                        return new Rectangle(rectX, rectY, rectWidth, rectHeight);
-                    }).ToArray();
-
-                    float animationSpeed = float.Parse(rectsAndSpeed[1].Trim());
-
-                    animationClips[animationName] = new AnimationClip(frames, animationSpeed);
-                }
+                return new Consumble(
+                   ResourceManager.GetTexture(sprite),
+                   position,
+                   ranRect,
+                   color,
+                   rotation,
+                   size,
+                   layerDepth,
+                   origin
+               );
             }
-            string itemTypeName = data[9].Trim();
-
-            ItemType type = itemTypeName switch
+            else if (ranItem >= 70 && ranItem < 90)
             {
-                "Wearable" => ItemType.Wearable,
-                "Weapon" => ItemType.Weapon,
-                "Consumable" => ItemType.Consumable,
-                _ => ItemType.Consumable
-            };
-            int minScore = int.Parse(data[10].Trim());
-            int maxScore = int.Parse(data[11].Trim());
-
-            return new Item(
-                ResourceManager.GetTexture(sprite),
-                position,
-                speed,
-                color,
-                rotation,
-                size,
-                layerDepth,
-                origin,
-                animationClips,
-                type,
-                minScore,
-                maxScore
-            );
+                return new Wearable(
+                    ResourceManager.GetTexture(sprite),
+                    position,
+                    ranRect,
+                    color,
+                    rotation,
+                    size,
+                    layerDepth,
+                    origin
+                );
+            }
+            else
+            {
+                return new Weapon(
+                      ResourceManager.GetTexture(sprite),
+                      position,
+                      ranRect,
+                      color,
+                      rotation,
+                      size,
+                      layerDepth,
+                      origin
+                  );
+            }
         }
     }
 }

@@ -53,9 +53,12 @@ namespace Pacman
                 if (newDirection.Length() != 0)
                     direction = newDirection;
 
-                var newDestination = Position + (direction * Level.TileSize);
-                destination = newDestination;
-                moving = true;
+                if (!GameManager.Level.IsTileWall(Position, direction))
+                {
+                    var newDestination = Position + (direction * Level.TileSize);
+                    destination = newDestination;
+                    moving = true;
+                }
             }
             else
             {
@@ -77,38 +80,44 @@ namespace Pacman
         private Vector2 GetNewDirection()
         {
             Vector2 direction = Vector2.Zero;
-            //if (InputManager.CurrentKeyboard != InputManager.PreviousKeyboard)
-            //{
-               
-            //Debug.WriteLine("I go");
-            //}
+           
 
             direction = InputManager.GetMovement();
-            if(direction.Length() != 0)
+            if (GameManager.Level.IsTileWall(Position, direction))
             {
-                if (direction.X != 0)
+                direction = Vector2.Zero;
+                //Not necessary but makes the code clearer
+                moving = false;
+            }
+            else
+            {
+                if (direction.Length() != 0)
                 {
-                    if (direction.X == -1)
+                    if (direction.X != 0)
                     {
-                        Rotation = MathHelper.ToRadians(180);
+                        if (direction.X == -1)
+                        {
+                            Rotation = MathHelper.ToRadians(180);
+                        }
+                        else
+                        {
+                            Rotation = MathHelper.ToRadians(0);
+                        }
                     }
                     else
                     {
-                        Rotation = MathHelper.ToRadians(0);
-                    }
-                }
-                else
-                {
-                    if (direction.Y == -1)
-                    {
-                        Rotation = MathHelper.ToRadians(270);
-                    }
-                    else
-                    {
-                        Rotation = MathHelper.ToRadians(90);
+                        if (direction.Y == -1)
+                        {
+                            Rotation = MathHelper.ToRadians(270);
+                        }
+                        else
+                        {
+                            Rotation = MathHelper.ToRadians(90);
+                        }
                     }
                 }
             }
+           
             return direction;
         }
         

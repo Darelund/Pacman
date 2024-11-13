@@ -55,7 +55,7 @@ namespace Pacman
                     {
                         if (result[i][j] == tileConfig.TileName)
                         {
-                            _tiles[j, i] = new Tile(new Vector2(TileSize.X * j + startPosition.X, TileSize.Y * i + startPosition.Y), tileConfig.tileTexture, tileConfig.type, tileConfig.tileColor, tileConfig.TileName);
+                            _tiles[j, i] = new Tile(new Vector2(TileSize.X * j + _startPosition.X, TileSize.Y * i + _startPosition.Y), tileConfig.tileTexture, tileConfig.type, tileConfig.tileColor, tileConfig.TileName);
                             break;
                         }
                         else
@@ -65,8 +65,7 @@ namespace Pacman
                             TileType defaultTileType = TileType.Path;
                             Color defaultColor = Color.White;
                             char defaultName = 'p';
-                            Rectangle _sourceRec = new Rectangle(0, 0, 30, 30);
-                            _tiles[j, i] = new Tile(new Vector2(TileSize.X * j + startPosition.X, TileSize.Y * i + startPosition.Y), ResourceManager.GetTexture(defaultTextureString), defaultTileType, defaultColor, defaultName);
+                            _tiles[j, i] = new Tile(new Vector2(TileSize.X * j + _startPosition.X, TileSize.Y * i + _startPosition.Y), ResourceManager.GetTexture(defaultTextureString), defaultTileType, defaultColor, defaultName);
                         }
 
                         foreach (char GameObjectName in GameObjectConfigurations)
@@ -74,7 +73,9 @@ namespace Pacman
                               
                             if (result[i][j] == GameObjectName)
                             {
-                                GameObjectsInLevel.Add(_factory.CreateGameObjectFromType(GameObjectName.ToString()));
+                                var startPos = new Vector2(TileSize.X * j + _startPosition.X, TileSize.Y * i + _startPosition.Y);
+                                (char Type, Vector2 StartPos) Data = (GameObjectName, startPos);
+                                GameObjectsInLevel.Add(_factory.CreateGameObjectFromType(Data));
                                 break;
                             }
                             //if (result[i][j] == GameObjectName)
@@ -226,11 +227,18 @@ namespace Pacman
         //    return !(_tiles[tilePos.X, tilePos.Y].Type == TileType.NonWalkable);
         //}
 
-        public bool IsTileWall(Vector2 vec)
+        public bool IsTileWall(Vector2 position, Vector2 dir)
         {
-            Point tilePos = GetTileAtPosition(vec);
+            Point tilePos = GetTileAtPosition(position);
 
-           // tilePos.Y += 1;
+            if(dir.X != 0)
+            {
+                tilePos.X += (int)dir.X;
+            }
+            else
+            {
+                tilePos.Y += (int)dir.Y;
+            }
             if(!TileExistsAtPosition(tilePos))
             {
                 Console.WriteLine("Outside of bounds, so will default to false");

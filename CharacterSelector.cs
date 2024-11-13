@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,7 +30,7 @@ namespace Pacman
         private const float _buttonDefaultSize = 1;
         private const float _buttonDefaultLayderDepth = 0.1f;
         private const int _buttonValue1 = 1;
-        private const int _buttonValue2 = 1;
+        private const int _buttonValue2 = 2;
         private static readonly Action<object> _buttonMethod = SelectCharacter;
 
         private static readonly Color _defaultUIColor = Color.White;
@@ -98,17 +99,19 @@ namespace Pacman
                 switch (selection)
                 {
                     case 1:
-                        GameFiles.Character.CHARACTERCOLOR = "White";
+                        GameFiles.Character.CHARACTERCOLOR = "yellow";
                         break;
                     case 2:
-                        GameFiles.Character.CHARACTERCOLOR = "Pink";
+                        GameFiles.Character.CHARACTERCOLOR = "pink";
                         break;
                     default:
+                        GameFiles.Character.CHARACTERCOLOR = "green";
                         break;
                 }
             }
             // LevelManager.NextLevel(true);
             GameManager.Level.ActivateLevel();
+            Debug.WriteLine(GameManager.GameObjects.Count);
             GameManager.ChangeGameState(GameManager.GameState.Playing);
         }
     }

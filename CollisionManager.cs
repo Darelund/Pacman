@@ -8,7 +8,7 @@ namespace Pacman
 {
     public static class CollisionManager
     {
-        public static List<GameObject> _collidables => GameManager.GetGameObjects;
+        public static List<GameObject> _collidables => GameManager.GameObjects;
         public static void CheckCollision()
         {
             for (int i = 0; i < _collidables.Count; i++)

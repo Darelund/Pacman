@@ -23,7 +23,7 @@ namespace Pacman
             Exit
         }
         public static List<GameObject> GameObjects { get; set; } = new List<GameObject>();
-        public static List<GameObject> GetGameObjects => GameObjects;
+       // public static List<GameObject> GetGameObjects => GameObjects;
         private static List<FlashEffect> _flashEffects = new List<FlashEffect>();
 
         public static GameState CurrentGameState { get; private set; } = GameState.MainMenu;

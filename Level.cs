@@ -14,15 +14,18 @@ namespace Pacman
 {
     public class Level
     {
-        protected Vector2 _startPosition;
-        protected Tile[,] _tiles;
+        private Vector2 _startPosition;
+        public Tile[,] _tiles;
+
+        public static Vector2 TileSize { get; private set; } = new Vector2(31, 31);
+
         public bool LevelCompleted { get; set; } = false;
        // public event Action<Tile> TileSteppedOnHandler;
-       // private GameObjectFactory _factory;
-       // public List<GameObject> GameObjectsInLevel = new();
+        private GameObjectFactory _factory;
+        public List<GameObject> GameObjectsInLevel { get; } = new();
         public Level()
         {
-          //  _factory = new GameObjectFactory();
+            _factory = new GameObjectFactory();
         }
 
 
@@ -38,13 +41,12 @@ namespace Pacman
         /// </summary>
         /// <param name="file"></param>
         /// <param name="tileTexture"></param>
-        public void CreateLevel(string file, Vector2 startPosition, List<(char TileName, Texture2D tileTexture, TileType type, Color tileColor, string SpriteCode)> tileConfigurations, List<char> GameObjectConfigurations)
+        public void CreateLevel(string file, Vector2 startPosition, List<(char TileName, Texture2D tileTexture, TileType type, Color tileColor)> tileConfigurations, List<char> GameObjectConfigurations)
         {
             List<string> result = FileManager.ReadFromFile(file);
             _startPosition = startPosition;
             _tiles = new Tile[result[0].Length, result.Count];
 
-            Vector2 size = new Vector2(40, 40);
             for (int i = 0; i < result.Count; i++)
             {
                 for (int j = 0; j < result[0].Length; j++)
@@ -53,7 +55,7 @@ namespace Pacman
                     {
                         if (result[i][j] == tileConfig.TileName)
                         {
-                            _tiles[j, i] = new Tile(new Vector2(size.X * j + startPosition.X, size.Y * i + startPosition.Y), tileConfig.tileTexture, tileConfig.type, tileConfig.tileColor, tileConfig.TileName, TileEditor.rectMap[tileConfig.SpriteCode]);
+                            _tiles[j, i] = new Tile(new Vector2(TileSize.X * j + startPosition.X, TileSize.Y * i + startPosition.Y), tileConfig.tileTexture, tileConfig.type, tileConfig.tileColor, tileConfig.TileName);
                             break;
                         }
                         else
@@ -63,32 +65,39 @@ namespace Pacman
                             TileType defaultTileType = TileType.Path;
                             Color defaultColor = Color.White;
                             char defaultName = 'p';
-                            Rectangle _sourceRec = new Rectangle(0, 0, 39, 39);
-                            _tiles[j, i] = new Tile(new Vector2(size.X * j + startPosition.X, size.Y * i + startPosition.Y), ResourceManager.GetTexture(defaultTextureString), defaultTileType, defaultColor, defaultName, _sourceRec);
+                            Rectangle _sourceRec = new Rectangle(0, 0, 30, 30);
+                            _tiles[j, i] = new Tile(new Vector2(TileSize.X * j + startPosition.X, TileSize.Y * i + startPosition.Y), ResourceManager.GetTexture(defaultTextureString), defaultTileType, defaultColor, defaultName);
                         }
 
                         foreach (char GameObjectName in GameObjectConfigurations)
                         {
+                              
                             if (result[i][j] == GameObjectName)
                             {
-                                //Create a player
+                                GameObjectsInLevel.Add(_factory.CreateGameObjectFromType(GameObjectName.ToString()));
                                 break;
                             }
-                            if (result[i][j] == GameObjectName)
-                            {
-                                //Create an enemy
-                                break;
-                            }
-                            if (result[i][j] == GameObjectName)
-                            {
-                                //Create a pickup
-                                break;
-                            }
+                            //if (result[i][j] == GameObjectName)
+                            //{
+                            //    //Create a player
+                            //    break;
+                            //}
+                            //if (result[i][j] == GameObjectName)
+                            //{
+                            //    //Create an enemy
+                            //    break;
+                            //}
+                            //if (result[i][j] == GameObjectName)
+                            //{
+                            //    //Create a pickup
+                            //    break;
+                            //}
                         }
-                        
+
                     }
                 }
             }
+            GameManager.GameObjects.AddRange(GameObjectsInLevel);
         }
         
         public virtual bool CheckLevelCompletion()
@@ -150,9 +159,9 @@ namespace Pacman
        // public abstract void SetTarget();
 
 
-        public static List<(char TileName, Texture2D tileTexture, TileType Type, Color tileColor, string SpriteCode)> ReadTileDataFromFile(string fileName)
+        public static List<(char TileName, Texture2D tileTexture, TileType Type, Color tileColor)> ReadTileDataFromFile(string fileName)
         {
-            List<(char, Texture2D, TileType, Color, string)> tileData = new List<(char, Texture2D, TileType, Color, string)>();
+            List<(char, Texture2D, TileType, Color)> tileData = new List<(char, Texture2D, TileType, Color)>();
 
             using (StreamReader reader = new StreamReader(fileName))
             {
@@ -160,7 +169,7 @@ namespace Pacman
                 {
                     string[] line = reader.ReadLine().Split(' ');
 
-                    if (line.Length == 5)
+                    if (line.Length == 4)
                     {
                         char tileName = line[0][0];
                         string textureName = line[1];
@@ -176,9 +185,8 @@ namespace Pacman
                             "DarkGreen" => Color.DarkGreen,
                             _ => Color.White // Default color if not found
                         };
-                        string spriteCodeName = line[4].Trim();
                         // Add the tile to the list, converting the texture name to a Texture2D object
-                        tileData.Add((tileName, ResourceManager.GetTexture(textureName), type, color, spriteCodeName));
+                        tileData.Add((tileName, ResourceManager.GetTexture(textureName), type, color));
                     }
                 }
             }
@@ -218,20 +226,23 @@ namespace Pacman
         //    return !(_tiles[tilePos.X, tilePos.Y].Type == TileType.NonWalkable);
         //}
 
-        public bool IsTilePath(Vector2 vec)
+        public bool IsTileWall(Vector2 vec)
         {
             Point tilePos = GetTileAtPosition(vec);
 
-            tilePos.Y += 1;
-            TileExistsAtPosition(tilePos);
+           // tilePos.Y += 1;
+            if(!TileExistsAtPosition(tilePos))
+            {
+                Console.WriteLine("Outside of bounds, so will default to false");
+                return false;
+            }
 
-            return (_tiles[tilePos.X, tilePos.Y].Type == TileType.Path);
+            return (_tiles[tilePos.X, tilePos.Y].Type == TileType.Wall);
         }
         private Point GetTileAtPosition(Vector2 vec)
         {
-            int tileSize = 40;
             vec -= _startPosition;
-            return new Point((int)vec.X / tileSize, (int)vec.Y / tileSize);
+            return new Point((int)vec.X / (int)TileSize.X, (int)vec.Y / (int)TileSize.Y);
         }
         private bool TileExistsAtPosition(Point tilePos)
         {
@@ -239,6 +250,29 @@ namespace Pacman
             if (tilePos.Y < 0 || tilePos.Y >= _tiles.GetLength(1)) return false;
            // TileSteppedOnHandler?.Invoke(_tiles[tilePos.X, tilePos.Y]);
             return true;
+        }
+
+        public string GetTileKey(Point tilePosition)
+        {
+            Point tilePos = GetTileAtPosition(tilePosition.ToVector2());
+
+            string tileKey = string.Empty;
+            (int y, int x)[] directions = { (-1, 0), (0, 1), (1, 0), (0, -1) };
+
+            foreach (var (y, x) in directions)
+            {
+                int newY = tilePos.Y + y;
+                int newX = tilePos.X + x;
+
+               // tileKey += IsTileWall(new(newX, newY)) ? "0" : "1";
+               if(!TileExistsAtPosition(new Point(newX, newY)))
+                {
+                    tileKey += "0";
+                    continue;
+                }
+                tileKey += (_tiles[newX, newY].Type == TileType.Path) ? "0" : "1";
+            }
+            return tileKey;
         }
     }
 }

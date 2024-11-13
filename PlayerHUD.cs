@@ -20,7 +20,7 @@ namespace Pacman
         public PlayerHUD()
         {
             _LifeText = new UIText(ResourceManager.GetSpriteFont("GameText"), "Lifes: ", new Vector2(50, 20), Color.White, 0.8f, Vector2.Zero, 0.9f);
-            _lifeImage = new UIImage(ResourceManager.GetTexture("pacman-heart"), new Vector2(80, 0), Color.White, 3, Vector2.Zero, new Rectangle(0, 0, 39, 39), 0.9f);
+            _lifeImage = new UIImage(ResourceManager.GetTexture("pacman-heart"), new Vector2(80, 0), Color.White, 1, Vector2.Zero, new Rectangle(0, 0, 39, 39), 0.9f);
             //  hearts = (int)PlayerController.Instance.Health;
             ScoreManager.OnScoreChanged += OnScoreChanged;
 

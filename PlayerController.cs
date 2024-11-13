@@ -25,6 +25,7 @@ namespace Pacman
         private bool _inAttackMode = false;
         private bool _isActive = true;
         public string Name { get; set; }
+        private float _speed = 50;
 
         private static PlayerController _instance;
         public static PlayerController Instance
@@ -52,15 +53,13 @@ namespace Pacman
                 if (newDirection.Length() != 0)
                     direction = newDirection;
 
-                var newDestination = Position + direction * 32;
+                var newDestination = Position + (direction * Level.TileSize);
                 destination = newDestination;
                 moving = true;
             }
             else
             {
-                int tileSize = 32;
-                int numberToTestSpeed = 50;
-                Position += direction * (tileSize + numberToTestSpeed) * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                Position += direction * (Level.TileSize.X + _speed) * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 if (Vector2.Distance(Position, destination) < 1)
                 {
                     Position = destination;

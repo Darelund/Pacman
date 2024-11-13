@@ -41,7 +41,7 @@ namespace Pacman
                 int newY = tilePosition.Y + y;
                 int newX = tilePosition.X + x;
 
-               // tileKey += IsTileSolid(tiles, new(newX, newY)) ? "0" : "1";
+              //  tileKey += GameIsTileWall(tiles, new(newX, newY)) ? "0" : "1";
             }
             return tileKey;
         }

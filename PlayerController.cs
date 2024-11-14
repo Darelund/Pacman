@@ -87,6 +87,9 @@ namespace Pacman
             {
                 direction = Vector2.Zero;
                 //Not necessary but makes the code clearer
+                //Or I actually think I need to set it to false
+                //Or I do think No I don't need it because I set the direction to zero, so it will go back to false in the Update either way
+                //Eh lets just leave it
                 moving = false;
             }
             else
@@ -162,6 +165,11 @@ namespace Pacman
         public void ImmuneHandler(bool immune)
         {
             IsImmune = immune;
+        }
+        public void GettingTeleported()
+        {
+           // direction = Vector2.Zero;
+            moving = false;
         }
     }
 }

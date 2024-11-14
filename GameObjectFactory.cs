@@ -22,6 +22,8 @@ namespace Pacman
                     return CreatePlayerController(data.Position);
                 case 'C':
                     return CreateItem(data.Position);
+                case 'T':
+                    return CreateTeleport(data.Position);
                 default:
                     Debug.WriteLine("Unknown object type: " + data.ObjectType);
                     return null;
@@ -306,6 +308,43 @@ namespace Pacman
                       origin
                   );
             }
+        }
+        private Teleport CreateTeleport(Vector2 data)
+        {
+            string sprite = "empty";
+            //Vector2 positionOffset = new Vector2(14.5f, 14.5f);
+            Vector2 position = data;
+
+            //float speed = float.Parse(data[2]);
+            Color color = Color.White;
+            //Color color = colorName switch
+            //{
+            //    "white" => Color.White,
+            //    "yellow" => Color.Yellow,
+            //    "red" => Color.Red,
+            //    "blue" => Color.Blue,
+            //    "green" => Color.Green,
+            //    "pink" => Color.HotPink,
+            //    _ => Color.White
+            //};
+            float rotation = 0;
+            float size = 0.8f; // To make it same size as the other tiles
+            float layerDepth = 0.1f;
+
+
+            Vector2 origin = new Vector2(0, 0);
+
+           
+
+            return new Teleport(
+                ResourceManager.GetTexture(sprite),
+                position,
+                color,
+                rotation,
+                size,
+                layerDepth,
+                origin
+            );
         }
     }
 }

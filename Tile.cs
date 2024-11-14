@@ -30,15 +30,22 @@ namespace Pacman
             _color = color;
             Name = name;
         }
-        public void Update(GameTime gameTime)
+        public virtual void Update(GameTime gameTime)
         {
             
         }
-        public void Draw(SpriteBatch spriteBatch)
+        public virtual void Draw(SpriteBatch spriteBatch)
         {
-            TileEditor.rectMap.TryGetValue(GameManager.Level.GetTileKey(Pos.ToPoint()), out Rectangle sourceRect);
+            if(Type == TileType.Wall)
+            {
+                TileEditor.rectMap.TryGetValue(GameManager.Level.GetTileKey(Pos.ToPoint()), out Rectangle sourceRect);
 
-            spriteBatch.Draw(_texture, Pos, sourceRect, _color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0.9f);
+                spriteBatch.Draw(_texture, Pos, sourceRect, _color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0.9f);
+            }
+          else
+            {
+                spriteBatch.Draw(_texture, Pos, _sourceRec, _color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0.9f);
+            }
         }
         public void SwitchTile(Texture2D newTexture)
         {

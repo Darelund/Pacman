@@ -99,10 +99,84 @@ namespace Pacman
                     }
                 }
             }
-            Debug.WriteLine(GameManager.GameObjects.Count);
+            foreach (Teleport teleport in GameManager.GameObjects.FindAll(obj => obj.GetType() == typeof(Teleport)).ToList())
+            {
+                //Find the teleports array location 
+                var location = GetTileAtPosition(teleport.Position);
+                Debug.WriteLine($"X: {location.X} Y: {location.Y}");
+
+                string tileKey = string.Empty;
+                (int y, int x)[] directions = { (-1, 0), (0, 1), (1, 0), (0, -1) };
+
+                foreach (var (y, x) in directions)
+                {
+                    int newY = location.Y + y;
+                    int newX = location.X + x;
+
+                    // tileKey += IsTileWall(new(newX, newY)) ? "0" : "1";
+                    if (!TileExistsAtPosition(new Point(newX, newY)))
+                    {
+                        tileKey += "1";
+                        continue;
+                    }
+                    tileKey +=  "0";
+                }
+                // tileKey;
+
+                Vector2 teleportDirection = tileKey switch
+                {
+                    "1000" => new Vector2(0, 1),
+                    "0100" => new Vector2(1, 0),
+                    "0010" => new Vector2(0, -1),
+                    "0001" => new Vector2(-1, 0),
+                    _ => new Vector2(0, 1)
+                };
+                Debug.WriteLine(tileKey);
+                float maxDistance = 0;
+                int tileToPick = 0;
+                //This part
+                if(teleportDirection.X != 0)
+                {
+                    //X
+                    for (int i = 0; i < _tiles.GetLength(0); i++)
+                    {
+                        if (Vector2.Distance(location.ToVector2(), new Vector2(i, location.Y)) > maxDistance)
+                        {
+                            maxDistance = Vector2.Distance(location.ToVector2(), new Vector2(location.X, i));
+                            tileToPick = i;
+                        }
+                    }
+                    var tile = _tiles[tileToPick, location.Y];
+                    tile.Type = TileType.Path;
+                    tile.SwitchTile(ResourceManager.GetTexture("empty"));
+
+                    teleport.SetPosition(tile.Pos);
+
+                }
+                else
+                {
+                    //Y 7 13
+                    for (int i = 0; i < _tiles.GetLength(1); i++)
+                    {
+                        if (Vector2.Distance(location.ToVector2(), new Vector2(location.X, i)) > maxDistance)
+                        {
+                            maxDistance = Vector2.Distance(location.ToVector2(), new Vector2(location.X, i));
+                            tileToPick = i;
+                            Debug.WriteLine(i);
+                        }
+                    }
+                    var tile = _tiles[location.X, tileToPick];
+                    tile.Type = TileType.Path;
+                    tile.SwitchTile(ResourceManager.GetTexture("empty"));
+                    teleport.SetPosition(tile.Pos);
+                }
+               
+                //Find the furthest point
+            }
+            //Debug.WriteLine(GameManager.GameObjects.Count);
           //  GameManager.GameObjects.AddRange(GameObjectsInLevel);
            // ItemsInLevel = (GameManager.GameObjects.FindAll(obj => obj.GetType() == typeof(Item))).ToList();
-            Debug.WriteLine(GameManager.GameObjects.Count);
+           // Debug.WriteLine(GameManager.GameObjects.Count);
         }
 
         public virtual bool IsLevelCompleted()

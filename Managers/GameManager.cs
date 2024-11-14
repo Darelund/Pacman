@@ -44,7 +44,7 @@ namespace Pacman
             Window = window;
             Content = content;
             Device = device;
-           // _sceneSwitcher = new SceneSwitcher(Window, Device);
+            _sceneSwitcher = new SceneSwitcher(Window, Device);
         }
         public static void ContentLoad()
         {
@@ -87,7 +87,7 @@ namespace Pacman
                                 OnGameOver?.Invoke(Color.Black, GameState.GameOver);
                             }
 
-                            if (Level.LevelCompleted)
+                            if (Level.IsLevelCompleted())
                             {
                                 OnWin?.Invoke(Color.Green, GameState.Victory);
                             }
@@ -118,7 +118,7 @@ namespace Pacman
                 case GameState.Exit:
                     break;
             }
-           // _sceneSwitcher.Update(gameTime);
+            _sceneSwitcher.Update(gameTime);
         }
         public static void Draw(SpriteBatch spriteBatch)
         {
@@ -177,7 +177,7 @@ namespace Pacman
                 case GameState.Exit:
                     break;
             }
-          //  _sceneSwitcher.Draw(spriteBatch);
+            _sceneSwitcher.Draw(spriteBatch);
             spriteBatch.End();
         }
         //public static void AddGameObject(GameObject gameObject)

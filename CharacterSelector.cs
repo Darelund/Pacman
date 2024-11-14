@@ -111,7 +111,7 @@ namespace Pacman
             }
             // LevelManager.NextLevel(true);
             GameManager.Level.ActivateLevel();
-            Debug.WriteLine(GameManager.GameObjects.Count);
+          //  Debug.WriteLine(GameManager.GameObjects.Count);
             GameManager.ChangeGameState(GameManager.GameState.Playing);
         }
     }

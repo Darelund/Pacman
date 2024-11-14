@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SharpDX.Direct2D1.Effects;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace Pacman
         public static List<GameObject> _collidables => GameManager.GetGameObjects;
         public static void CheckCollision()
         {
-            Debug.WriteLine(_collidables.Count);
+          //  Debug.WriteLine(_collidables.Count);
             for (int i = 0; i < _collidables.Count; i++)
             {
                 for (int j = i + 1; j < _collidables.Count; j++)
@@ -20,11 +21,21 @@ namespace Pacman
                     if (_collidables[i].Collision.Intersects(_collidables[j].Collision))
                     {
                         _collidables[j].OnCollision(_collidables[i]);
-                        _collidables[i].OnCollision(_collidables[j]);//Problem med den sista?
+
+                        if(CollisionExistsAtPosition(j))
+                        {
+                            _collidables[i].OnCollision(_collidables[j]);
+                        }
                     }
                 }
             }
-          //  Debug.WriteLine("Checking collision");
+         //   Debug.WriteLine(_collidables.Count);
+        }
+        private static bool CollisionExistsAtPosition(int collisionPos)
+        {
+            if (collisionPos >= _collidables.Count) return false;
+
+            return true;
         }
     }
 }

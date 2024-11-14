@@ -19,17 +19,17 @@ namespace Pacman
 
         public static Vector2 TileSize { get; private set; } = new Vector2(31, 31);
 
-        public bool LevelCompleted { get; set; } = false;
+      //  public bool LevelCompleted { get; set; } = false;
        // public event Action<Tile> TileSteppedOnHandler;
         private GameObjectFactory _factory;
-        public List<GameObject> GameObjectsInLevel { get; } = new();
+       // public List<GameObject> GameObjectsInLevel { get; } = new();
         public Level()
         {
             _factory = new GameObjectFactory();
         }
 
 
-        //public List<GameObject> GameObjects = new List<GameObject>();
+      //  public List<GameObject> ItemsInLevel = new List<GameObject>();
         public void ActivateLevel()
         {
             CreateLevel(Levels.LevelData.LevelFile, Levels.LevelData.LevelStartPosition, Levels.LevelData.TileData, Levels.LevelData.GameObjectData);
@@ -75,7 +75,8 @@ namespace Pacman
                             {
                                 var startPos = new Vector2(TileSize.X * j + _startPosition.X, TileSize.Y * i + _startPosition.Y);
                                 (char Type, Vector2 StartPos) Data = (GameObjectName, startPos);
-                                GameObjectsInLevel.Add(_factory.CreateGameObjectFromType(Data));
+                               // GameObjectsInLevel.Add(_factory.CreateGameObjectFromType(Data));
+                                GameManager.GameObjects.Add(_factory.CreateGameObjectFromType(Data));
                                 break;
                             }
                             //if (result[i][j] == GameObjectName)
@@ -98,12 +99,15 @@ namespace Pacman
                     }
                 }
             }
-            GameManager.GameObjects.AddRange(GameObjectsInLevel);
+            Debug.WriteLine(GameManager.GameObjects.Count);
+          //  GameManager.GameObjects.AddRange(GameObjectsInLevel);
+           // ItemsInLevel = (GameManager.GameObjects.FindAll(obj => obj.GetType() == typeof(Item))).ToList();
+            Debug.WriteLine(GameManager.GameObjects.Count);
         }
-        
-        public virtual bool CheckLevelCompletion()
+
+        public virtual bool IsLevelCompleted()
         {
-            return false;
+            return GameManager.GameObjects.FindAll(obj => obj is Item).ToList().Count <= 0;
         }
        
         public virtual void Draw(SpriteBatch spriteBatch)

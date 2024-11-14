@@ -26,7 +26,7 @@ namespace Pacman
         {
             get
             {
-                return new Rectangle((int)Position.X - (int)Origin.X * (int)Size, (int)Position.Y - (int)Origin.Y * (int)Size, _rect.Width * (int)Size, _rect.Height * (int)Size);
+                return new Rectangle((int)Position.X - (int)(Origin.X * Size), (int)Position.Y - (int)(Origin.Y * Size), (int)(_rect.Width * Size), (int)(_rect.Height * Size));
             }
         }
 

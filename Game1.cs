@@ -11,7 +11,7 @@ namespace Pacman
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        private const string _textures = "ghost,pacman,tiles,pacman-character-yellow,pacman-character-pink,pacman-heart,empty,pacman_white";
+        private const string _textures = "ghost,pacman,tiles,pacman-character-yellow,pacman-character-pink,pacman-heart,empty,pacman_white,pacman_deathClip";
         private const string _sounds = "DeathSound,HardPop,FlameDamage,CoinPickupSound";
         private const string _music = "BackgroundMusic";
         private const string _font = "GameText";

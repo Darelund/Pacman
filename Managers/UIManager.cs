@@ -18,6 +18,7 @@ namespace Pacman
         private static List<UIElement> _VictoryElements;
         private static PlayerHUD _PlayerHUD;
 
+        private static Vector2 _middleOfScreen = new Vector2(GameManager.Window.ClientBounds.Width / 2, GameManager.Window.ClientBounds.Height / 2);
         private const string _fontUsed = "GameText";
         private static readonly Action<object> _objectState = GameManager.ChangeGameState;
 
@@ -65,12 +66,21 @@ namespace Pacman
         //Pause
 
         //GameOver
-        private const string _gameOvertex = "loose";
-        private static readonly Vector2 _backgroundGameOverPos = Vector2.Zero;
-        private static readonly Color _backgroundDeathColor = Color.White;
-        private const float _deathbackgroundSize = 1f;
-        private static readonly Vector2 _backgroundDeathOrigin = Vector2.Zero;
-        private const float _deathbackgroundLayerDeph = 1f;
+        //private const string _gameOvertex = "pacman_deathClip";
+        //private static readonly Vector2 _backgroundGameOverPos = Vector2.Zero;
+        //private static readonly Color _backgroundDeathColor = Color.White;
+        //private const float _deathbackgroundSize = 1f;
+        //private static readonly Vector2 _backgroundDeathOrigin = Vector2.Zero;
+        //private const float _deathbackgroundLayerDeph = 1f;
+
+        private const string _gameOvertex = "pacman_deathClip";
+        private static readonly Vector2 _gameOveranimatedSpritePos = _middleOfScreen;
+        private static readonly (Point currentFrame, Point frameSize, Point sheetSize) _gameOverSpriteAnimationConfig = (new Point(0, 0), new Point(240, 200), new Point(4, 5));
+        private static readonly Color _gameOverSpriteAnimationDeathColor = Color.White;
+        private const float _gameOverSpriteAnimationSize = 2f;
+        private static readonly Vector2 _gameOverSpriteAnimationSizeOrigin = new Vector2(120, 100);
+        private const int _gameOverSpriteAnimationSpeed = 200;
+        private const float _gameOverSpriteAnimationLayerDepth = 1f;
 
         private static readonly (Color color1, Color color2, Color color3) _GameOverButtonColors = (Color.White, Color.Red, Color.DarkRed);
         private static readonly Vector2 _GameOverButtonPos = new Vector2(GameManager.Window.ClientBounds.Width / 2, GameManager.Window.ClientBounds.Height / 2 + 300);
@@ -105,10 +115,10 @@ namespace Pacman
             //_MainMenuElements.Add(new AnimatedSpriteUI(ResourceManager.GetTexture(_maintex2), _animatedSprite1Pos, _spriteAnimationConfig1.currentFrame, _spriteAnimationConfig1.frameSize, _spriteAnimationConfig1.sheetSize, _animatedSpritesColor, _animatedSpritesSize, _animatedSpritesOrigin, _animatedSpritesSpeed1));
             //_MainMenuElements.Add(new AnimatedSpriteUI(ResourceManager.GetTexture(_maintex3), _animatedSprite2Pos, _spriteAnimationConfig2.currentFrame, _spriteAnimationConfig2.frameSize, _spriteAnimationConfig2.sheetSize, _animatedSpritesColor, _animatedSpritesSize, _animatedSpritesOrigin, _animatedSpritesSpeed2));
 
-           // _PlayingElements.Add(new StaticBackground(ResourceManager.GetTexture(_playingbackgroundtex), _backgroundPlayingPos, _backgroundPlayingColor, _playingbackgroundSize, _backgroundPlayingOrigin, _playingbackgroundLayerDepth));
+            // _PlayingElements.Add(new StaticBackground(ResourceManager.GetTexture(_playingbackgroundtex), _backgroundPlayingPos, _backgroundPlayingColor, _playingbackgroundSize, _backgroundPlayingOrigin, _playingbackgroundLayerDepth));
 
-
-            _GameOverElements.Add(new StaticBackground(ResourceManager.GetTexture(_gameOvertex), _backgroundGameOverPos, _backgroundDeathColor, _deathbackgroundSize, _backgroundDeathOrigin, _deathbackgroundLayerDeph));
+            _GameOverElements.Add(new AnimatedSpriteUI(ResourceManager.GetTexture(_gameOvertex), _gameOveranimatedSpritePos, _gameOverSpriteAnimationConfig.currentFrame, _gameOverSpriteAnimationConfig.frameSize, _gameOverSpriteAnimationConfig.sheetSize, _gameOverSpriteAnimationDeathColor, _gameOverSpriteAnimationSize, _gameOverSpriteAnimationSizeOrigin, _gameOverSpriteAnimationSpeed, _gameOverSpriteAnimationLayerDepth));
+            //_GameOverElements.Add(new StaticBackground(ResourceManager.GetTexture(_gameOvertex), _backgroundGameOverPos, _backgroundDeathColor, _deathbackgroundSize, _backgroundDeathOrigin, _deathbackgroundLayerDeph));
             _GameOverElements.Add(new Button(ResourceManager.GetSpriteFont(_fontUsed), _GameOverButtonColors, _GameOverButtonPos, _GameOverButtonOrigin, _GameOverState, _objectState, _gameOverText));
 
             _VictoryElements.Add(new Button(ResourceManager.GetSpriteFont(_fontUsed), _victoryButtonColors, _playingPos, _playingOrigin, _victoryState, _objectState, _victoryText));

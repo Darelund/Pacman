@@ -9,8 +9,14 @@ using System.Threading.Tasks;
 
 namespace Pacman
 {
+    public enum PlayerState
+    {
+        Walking,
+        Attacking
+    }
     public class PlayerController : AnimatedGameObject
     {
+        public PlayerState PlayerState = PlayerState.Walking;
         private Vector2 direction;
         private Vector2 newDirection;
         private Vector2 destination;
@@ -24,8 +30,11 @@ namespace Pacman
         public bool IsImmune { get; private set; } = false;
         private bool _inAttackMode = false;
         private bool _isActive = true;
-        public string Name { get; set; }
         private float _speed = 50;
+
+        private const string _attackAnim = "Attack";
+        private const string _dieAnim = "Die";
+        private const string _idleAnim = "Idle";
 
         private static PlayerController _instance;
         public static PlayerController Instance
@@ -69,6 +78,11 @@ namespace Pacman
                     moving = false;
                 }
                 //Debug.WriteLine(destination);
+
+                if(InputManager.DebugButton())
+                {
+                    TakeDamage(3);
+                }
             }
 
             base.Update(gameTime);
@@ -132,10 +146,15 @@ namespace Pacman
             if (_health <= 0)
             {
                 _isActive = false;
-               // HighScore.UpdateScore(Name, ScoreManager.PlayerScore, LevelManager.LevelIndex);
+                HighScore.UpdateScore(GameManager.Name, ScoreManager.PlayerScore, GameManager.Level.LevelIndex);
                 string deathSound = "DeathSound";
+
+                //Maybe add a death animation
+                //SwitchAnimation(_dieAnim);
+                //string newTexture = "pacman_deathClip";
+                //Texture = ResourceManager.GetTexture(newTexture);
+
                 AudioManager.PlaySoundEffect(deathSound);
-                ScoreManager.ResetScore();
             }
             Debug.WriteLine(_health);
         }

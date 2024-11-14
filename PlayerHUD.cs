@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,6 +36,7 @@ namespace Pacman
                 _lifeImage.Draw(spriteBatch, heartPosition);
             }
             _scoreText.Draw(spriteBatch);
+            Debug.WriteLine(hearts);
         }
         public void Update(GameTime gameTime)
         {

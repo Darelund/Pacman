@@ -170,6 +170,80 @@ namespace Pacman
         //    );
         //}
 
+        private EnemyController CreateEnemyController(Vector2 data)
+        {
+            string sprite = "pacman_white";
+            //Offset because character is bigger than tiles
+            Vector2 positionOffset = new Vector2(14.5f, 14.5f);
+            Vector2 position = data + positionOffset;
+
+            //float speed = float.Parse(data[2]);
+            string colorName = GameFiles.Character.CHARACTERCOLOR;
+            Color color = colorName switch
+            {
+                "white" => Color.White,
+                "yellow" => Color.Yellow,
+                "red" => Color.Red,
+                "blue" => Color.Blue,
+                "green" => Color.Green,
+                "pink" => Color.HotPink,
+                _ => Color.White
+            };
+            float rotation = 0;
+            float size = 0.6f;
+            float layerDepth = 0;
+
+
+            Vector2 origin = new Vector2(19.5f, 19.5f);
+
+            Rectangle[] enemyRoaming =
+             {
+                new Rectangle(0, 0, 39, 39),
+                new Rectangle(40, 0, 39, 39),
+                new Rectangle(80, 0, 39, 39),
+                new Rectangle(120, 0, 39, 39)
+            };
+            Rectangle[] enemyChasing =
+             {
+                new Rectangle(0, 0, 39, 39),
+                new Rectangle(40, 0, 39, 39),
+                new Rectangle(80, 0, 39, 39),
+                new Rectangle(120, 0, 39, 39)
+            };
+            Rectangle[] enemyFleeing =
+             {
+                new Rectangle(0, 0, 39, 39),
+                new Rectangle(40, 0, 39, 39),
+                new Rectangle(80, 0, 39, 39),
+                new Rectangle(120, 0, 39, 39)
+            };
+            Rectangle[] enemyDead =
+             {
+                new Rectangle(0, 0, 39, 39),
+                new Rectangle(40, 0, 39, 39),
+                new Rectangle(80, 0, 39, 39),
+                new Rectangle(120, 0, 39, 39)
+            };
+
+            Dictionary<string, AnimationClip> animationClips = new Dictionary<string, AnimationClip>()
+            {
+                {"Roaming",  new AnimationClip(enemyRoaming, 7f)},
+                {"Chasing",  new AnimationClip(enemyRoaming, 7f)},
+                {"Fleeing",  new AnimationClip(enemyRoaming, 7f)},
+                {"Dead",  new AnimationClip(enemyRoaming, 7f)},
+            };
+
+            return new EnemyController(
+                ResourceManager.GetTexture(sprite),
+                position,
+                color,
+                rotation,
+                size,
+                layerDepth,
+                origin,
+                animationClips
+            );
+        }
         private PlayerController CreatePlayerController(Vector2 data)
         {
             string sprite = "pacman_white";
@@ -203,10 +277,33 @@ namespace Pacman
                 new Rectangle(80, 0, 39, 39),
                 new Rectangle(120, 0, 39, 39)
             };
+            Rectangle[] playerDying =
+            {
+                new Rectangle(0, 0, 240, 200),
+                new Rectangle(1 * 240, 0, 240, 200),
+                new Rectangle(2 * 240, 0, 240, 200),
+                new Rectangle(3 * 240, 0, 240, 200),
+
+                new Rectangle(0, 200, 240, 200),
+                new Rectangle(1 * 240, 200, 240, 200),
+                new Rectangle(2 * 240, 200, 240, 200),
+                new Rectangle(3 * 240, 200, 240, 200),
+
+                new Rectangle(0, 400, 240, 200),
+                new Rectangle(1 * 240, 400, 240, 200),
+                new Rectangle(2 * 240, 400, 240, 200),
+                new Rectangle(3 * 240, 400, 240, 200),
+
+                new Rectangle(0, 600, 240, 200),
+                new Rectangle(1 * 240, 600, 240, 200),
+                new Rectangle(2 * 240, 600, 240, 200),
+                new Rectangle(3 * 240, 600, 240, 200),
+            };
 
             Dictionary<string, AnimationClip> animationClips = new Dictionary<string, AnimationClip>()
             {
-                {"Idle",  new AnimationClip(playerWalking, 7f)}
+                {"Idle",  new AnimationClip(playerWalking, 7f)},
+                {"Die",  new AnimationClip(playerDying, 2f)}
             };
 
             return new PlayerController(

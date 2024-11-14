@@ -16,6 +16,7 @@ namespace Pacman
     {
         private Vector2 _startPosition;
         public Tile[,] _tiles;
+        public int LevelIndex = 0;
 
         public static Vector2 TileSize { get; private set; } = new Vector2(31, 31);
 
@@ -32,7 +33,9 @@ namespace Pacman
       //  public List<GameObject> ItemsInLevel = new List<GameObject>();
         public void ActivateLevel()
         {
+            LevelIndex++;
             CreateLevel(Levels.LevelData.LevelFile, Levels.LevelData.LevelStartPosition, Levels.LevelData.TileData, Levels.LevelData.GameObjectData);
+            GameManager.ChangeGameState(GameManager.GameState.Playing);
         }
 
         /// <summary>
@@ -195,11 +198,17 @@ namespace Pacman
         {
 
         }
-
-        public virtual void UnloadLevel()
+        public void RestartLevel()
         {
             _tiles = null;
-          //  GameObjectsInLevel.Clear();
+            GameManager.GameObjects.Clear();
+            ScoreManager.ResetScore();
+            LevelIndex = 0;
+            ActivateLevel();
+        }
+        public void NextLevel()
+        {
+            ActivateLevel();
         }
 
 

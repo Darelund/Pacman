@@ -19,7 +19,8 @@ namespace Pacman
         }
         public static void ResetScore()
         {
-            //PlayerScore = 0;
+            PlayerScore = 0;
+            OnScoreChanged?.Invoke();
         }
     }
 }

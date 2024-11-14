@@ -35,6 +35,7 @@ namespace Pacman
         public static Level Level { get; } = new();
         private static SceneSwitcher _sceneSwitcher;
 
+        public static string Name { get; set; }
 
         public static event Action<Color, GameState> OnPlaying, OnMainMenu, OnGameOver, OnWin, OnPause;
 
@@ -113,7 +114,7 @@ namespace Pacman
                     //LevelManager.SpecificLevel(5, true);
                     break;
                 case GameState.Restart:
-                    //LevelManager.Restart();
+                    Level.RestartLevel();
                     break;
                 case GameState.Exit:
                     break;

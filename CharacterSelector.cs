@@ -92,8 +92,8 @@ namespace Pacman
         {
             int startScore = 0;
             int startLevel = 0;
-            HighScore.UpdateScore(_textInputManager.InputText, startScore, startLevel);
-            PlayerController.Instance.Name = _textInputManager.InputText;
+            GameManager.Name = _textInputManager.InputText;
+            HighScore.UpdateScore(GameManager.Name, startScore, startLevel);
             if (selectedOption is int selection)
             {
                 switch (selection)
@@ -112,7 +112,6 @@ namespace Pacman
             // LevelManager.NextLevel(true);
             GameManager.Level.ActivateLevel();
           //  Debug.WriteLine(GameManager.GameObjects.Count);
-            GameManager.ChangeGameState(GameManager.GameState.Playing);
         }
     }
 }

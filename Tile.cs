@@ -38,7 +38,7 @@ namespace Pacman
         {
             if(Type == TileType.Wall)
             {
-                TileEditor.rectMap.TryGetValue(GameManager.Level.GetTileKey(Pos.ToPoint()), out Rectangle sourceRect);
+                TileEditor.rectMap.TryGetValue(LevelManager.GetCurrentLevel.GetTileKey(Pos.ToPoint()), out Rectangle sourceRect);
 
                 spriteBatch.Draw(_texture, Pos, sourceRect, _color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0.9f);
             }

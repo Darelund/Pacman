@@ -16,11 +16,10 @@ namespace Pacman
     {
         private Vector2 _startPosition;
         public Tile[,] _tiles;
-        public int LevelIndex = 0;
 
         public static Vector2 TileSize { get; private set; } = new Vector2(31, 31);
 
-      //  public bool LevelCompleted { get; set; } = false;
+        public bool LevelCompleted { get; set; } = false;
        // public event Action<Tile> TileSteppedOnHandler;
         private GameObjectFactory _factory;
        // public List<GameObject> GameObjectsInLevel { get; } = new();
@@ -33,9 +32,8 @@ namespace Pacman
       //  public List<GameObject> ItemsInLevel = new List<GameObject>();
         public void ActivateLevel()
         {
-            LevelIndex++;
-            CreateLevel(Levels.LevelData.LevelFile, Levels.LevelData.LevelStartPosition, Levels.LevelData.TileData, Levels.LevelData.GameObjectData);
-            GameManager.ChangeGameState(GameManager.GameState.Playing);
+           // CreateLevel(Levels.LevelData.LevelFile, Levels.LevelData.LevelStartPosition, Levels.LevelData.TileData, Levels.LevelData.GameObjectData);
+           // GameManager.ChangeGameState(GameManager.GameState.Playing);
         }
 
         /// <summary>
@@ -198,19 +196,11 @@ namespace Pacman
         {
 
         }
-        public void RestartLevel()
+        public void UnloadLevel()
         {
             _tiles = null;
             GameManager.GameObjects.Clear();
-            ScoreManager.ResetScore();
-            LevelIndex = 0;
-            ActivateLevel();
         }
-        public void NextLevel()
-        {
-            ActivateLevel();
-        }
-
 
         //Maybe use?
         public void CreateGameObjects(string objectsFilePath)

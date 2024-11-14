@@ -347,7 +347,7 @@ namespace Pacman
 
             float rotation = 0f;
             float size = 1.5f;
-            float layerDepth = 0f;
+            float layerDepth = 0.2f;
 
             Vector2 origin = new Vector2(6.5f, 7f);
 

@@ -62,7 +62,7 @@ namespace Pacman
                 if (newDirection.Length() != 0)
                     direction = newDirection;
 
-                if (!GameManager.Level.IsTileWall(Position, direction))
+                if (!LevelManager.GetCurrentLevel.IsTileWall(Position, direction))
                 {
                     var newDestination = Position + (direction * Level.TileSize);
                     destination = newDestination;
@@ -97,7 +97,7 @@ namespace Pacman
            
 
             direction = InputManager.GetMovement();
-            if (GameManager.Level.IsTileWall(Position, direction))
+            if (LevelManager.GetCurrentLevel.IsTileWall(Position, direction))
             {
                 direction = Vector2.Zero;
                 //Not necessary but makes the code clearer
@@ -146,7 +146,7 @@ namespace Pacman
             if (_health <= 0)
             {
                 _isActive = false;
-                HighScore.UpdateScore(GameManager.Name, ScoreManager.PlayerScore, GameManager.Level.LevelIndex);
+                HighScore.UpdateScore(GameManager.Name, ScoreManager.PlayerScore, LevelManager.LevelIndex);
                 string deathSound = "DeathSound";
 
                 //Maybe add a death animation

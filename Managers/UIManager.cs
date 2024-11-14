@@ -23,35 +23,27 @@ namespace Pacman
         private static readonly Action<object> _objectState = GameManager.ChangeGameState;
 
         //MainMenu
-        //private const string _maintex1 = "MainMenu_transparent";
-        //private const string _maintex2 = "DonkeyKongMainMenu1_transparent";
-        //private const string _maintex3 = "DonkeyKongMainMenu2_transparent";
-        //private static readonly Vector2 _staticBackgroundPosition = new Vector2(GameManager.Window.ClientBounds.Width / 2, 200);
-        //private static readonly Vector2 _staticBackgroundOrigin = new Vector2(ResourceManager.GetTexture(_maintex1).Width / 2, ResourceManager.GetTexture(_maintex1).Height / 2);
-        //private static readonly Color _mainColor1 = Color.White;
-        //private static readonly Color _mainColor2 = Color.LightBlue;
-        //private const float _mainSize1 = 0.90f;
-        //private const float _mainSize2 = 0.95f;
-        //private const float _mainlayerDepth = 0.2f;
+        //Animated sprites
+        private const string _maintex = "pacman";
+        private static readonly Vector2 _mainAnimatedSpritePos1 = new Vector2(GameManager.Window.ClientBounds.Width / 2 - 200, 200);
+        private static readonly Vector2 _mainAnimatedSpritePos2 = new Vector2(GameManager.Window.ClientBounds.Width / 2 + 200, 200);
+        private static readonly (Point currentFrame, Point frameSize, Point sheetSize) _mainSpriteAnimationConfig = (new Point(0, 0), new Point(40, 40), new Point(4, 0));
+        private static readonly Color _mainAnimatedSpritesColor = Color.White;
+        private const float _mainAnimatedSpritesSize = 2f;
+        private static readonly Vector2 _mainAnimatedSpritesOrigin = Vector2.Zero;
+        private const int _mainAnimatedSpritesSpeed = 100;
+
+
+       //Button
         private static readonly (Color color1, Color color2, Color color3) _MainMenuButtonColors = (Color.White, Color.LightBlue, Color.DarkBlue);
         private static readonly Vector2 _BackgroundButton = new Vector2(GameManager.Window.ClientBounds.Width / 2, GameManager.Window.ClientBounds.Height / 2);
         private static readonly Vector2 _BackgroundButtonOrigin = Vector2.Zero;
         private const GameManager.GameState _selectCharacterGameState = GameState.SelectCharacter;
         private const string _mainText = "Play";
-        private const float _textmainSize1 = 1f;
-        private const float _textmainSize2 = 0.1f;
+        private const float _mainMenuTextSize = 1f;
+        private const float _mainMenuTextLayerDepth = 0f;
 
-        //private static readonly Vector2 _animatedSprite1Pos = new Vector2(GameManager.Window.ClientBounds.Width / 2, GameManager.Window.ClientBounds.Height / 2 - 350);
-        //private static readonly Vector2 _animatedSprite2Pos = new Vector2(GameManager.Window.ClientBounds.Width / 2 - 165, GameManager.Window.ClientBounds.Height / 2 - 365);
-
-        //private static readonly (Point currentFrame, Point frameSize, Point sheetSize) _spriteAnimationConfig1 = (new Point(0, 0), new Point(92, 110), new Point(4, 0));
-        //private static readonly (Point currentFrame, Point frameSize, Point sheetSize) _spriteAnimationConfig2 = (new Point(0, 0), new Point(80, 110), new Point(4, 0));
-        //private static readonly Color _animatedSpritesColor = Color.White;
-        //private const float _animatedSpritesSize = 1f;
-        //private static readonly Vector2 _animatedSpritesOrigin = Vector2.Zero;
-
-        //private const int _animatedSpritesSpeed1 = 100;
-        //private const int _animatedSpritesSpeed2 = 150;
+        
 
 
         //Playing
@@ -111,8 +103,9 @@ namespace Pacman
 
             //_MainMenuElements.Add(new StaticBackground(ResourceManager.GetTexture(_maintex1), _staticBackgroundPosition, _mainColor1, _mainSize1, _staticBackgroundOrigin, _mainlayerDepth));
             //_MainMenuElements.Add(new StaticBackground(ResourceManager.GetTexture(_maintex1), _staticBackgroundPosition, _mainColor2, _mainSize2, _staticBackgroundOrigin, _mainlayerDepth));
-            _MainMenuElements.Add(new Button(ResourceManager.GetSpriteFont(_fontUsed), _MainMenuButtonColors, _BackgroundButton, _BackgroundButtonOrigin, _selectCharacterGameState, _objectState, _mainText, _textmainSize1, _textmainSize2));
-            //_MainMenuElements.Add(new AnimatedSpriteUI(ResourceManager.GetTexture(_maintex2), _animatedSprite1Pos, _spriteAnimationConfig1.currentFrame, _spriteAnimationConfig1.frameSize, _spriteAnimationConfig1.sheetSize, _animatedSpritesColor, _animatedSpritesSize, _animatedSpritesOrigin, _animatedSpritesSpeed1));
+            _MainMenuElements.Add(new Button(ResourceManager.GetSpriteFont(_fontUsed), _MainMenuButtonColors, _BackgroundButton, _BackgroundButtonOrigin, _selectCharacterGameState, _objectState, _mainText, _mainMenuTextSize, _mainMenuTextLayerDepth));
+            _MainMenuElements.Add(new AnimatedSpriteUI(ResourceManager.GetTexture(_maintex), _mainAnimatedSpritePos1, _mainSpriteAnimationConfig.currentFrame, _mainSpriteAnimationConfig.frameSize, _mainSpriteAnimationConfig.sheetSize, _mainAnimatedSpritesColor, _mainAnimatedSpritesSize, _mainAnimatedSpritesOrigin, _mainAnimatedSpritesSpeed));
+            _MainMenuElements.Add(new AnimatedSpriteUI(ResourceManager.GetTexture(_maintex), _mainAnimatedSpritePos2, _mainSpriteAnimationConfig.currentFrame, _mainSpriteAnimationConfig.frameSize, _mainSpriteAnimationConfig.sheetSize, _mainAnimatedSpritesColor, _mainAnimatedSpritesSize, _mainAnimatedSpritesOrigin, _mainAnimatedSpritesSpeed));
             //_MainMenuElements.Add(new AnimatedSpriteUI(ResourceManager.GetTexture(_maintex3), _animatedSprite2Pos, _spriteAnimationConfig2.currentFrame, _spriteAnimationConfig2.frameSize, _spriteAnimationConfig2.sheetSize, _animatedSpritesColor, _animatedSpritesSize, _animatedSpritesOrigin, _animatedSpritesSpeed2));
 
             // _PlayingElements.Add(new StaticBackground(ResourceManager.GetTexture(_playingbackgroundtex), _backgroundPlayingPos, _backgroundPlayingColor, _playingbackgroundSize, _backgroundPlayingOrigin, _playingbackgroundLayerDepth));

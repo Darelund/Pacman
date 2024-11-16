@@ -100,6 +100,7 @@ namespace Pacman
                     }
                 }
             }
+            //WELL THIS NEEDS TO BE FIXED SOMEHOW.
             foreach (Teleport teleport in GameManager.GameObjects.FindAll(obj => obj.GetType() == typeof(Teleport)).ToList())
             {
                 //Find the teleports array location 
@@ -135,12 +136,16 @@ namespace Pacman
                 Debug.WriteLine(tileKey);
                 float maxDistance = 0;
                 int tileToPick = 0;
+                char teleportLocation = 't';
+
+                Debug.WriteLine(teleportDirection);
                 //This part
                 if(teleportDirection.X != 0)
                 {
                     //X
                     for (int i = 0; i < _tiles.GetLength(0); i++)
                     {
+                        if (_tiles[i, location.Y].Name != teleportLocation) continue;
                         if (Vector2.Distance(location.ToVector2(), new Vector2(i, location.Y)) > maxDistance)
                         {
                             maxDistance = Vector2.Distance(location.ToVector2(), new Vector2(location.X, i));
@@ -159,6 +164,7 @@ namespace Pacman
                     //Y 7 13
                     for (int i = 0; i < _tiles.GetLength(1); i++)
                     {
+                        if (_tiles[location.X, i].Name != teleportLocation) continue;
                         if (Vector2.Distance(location.ToVector2(), new Vector2(location.X, i)) > maxDistance)
                         {
                             maxDistance = Vector2.Distance(location.ToVector2(), new Vector2(location.X, i));

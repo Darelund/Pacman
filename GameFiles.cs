@@ -14,10 +14,10 @@ namespace Pacman
         {
             private static readonly Vector2 defaultLevelStartPosition = new Vector2(96, 96);
 
+            public static readonly LevelConfig LevelData0 = new LevelConfig(Maps.DISPLAYMAP, defaultLevelStartPosition, Level.ReadTileDataFromFile(ContentInLevel.TILESINLEVEL), Level.ReadGameObjectDataFromFile(ContentInLevel.GAMEOBJECTSINLEVEL));
             public static readonly LevelConfig LevelData1 = new LevelConfig(Maps.MAP1, defaultLevelStartPosition, Level.ReadTileDataFromFile(ContentInLevel.TILESINLEVEL), Level.ReadGameObjectDataFromFile(ContentInLevel.GAMEOBJECTSINLEVEL));
             public static readonly LevelConfig LevelData2 = new LevelConfig(Maps.MAP2, defaultLevelStartPosition, Level.ReadTileDataFromFile(ContentInLevel.TILESINLEVEL), Level.ReadGameObjectDataFromFile(ContentInLevel.GAMEOBJECTSINLEVEL));
             public static readonly LevelConfig LevelData3 = new LevelConfig(Maps.MAP3, defaultLevelStartPosition, Level.ReadTileDataFromFile(ContentInLevel.TILESINLEVEL), Level.ReadGameObjectDataFromFile(ContentInLevel.GAMEOBJECTSINLEVEL));
-            public static readonly LevelConfig LevelData0 = new LevelConfig(Maps.DISPLAYMAP, defaultLevelStartPosition, Level.ReadTileDataFromFile(ContentInLevel.TILESINLEVEL), Level.ReadGameObjectDataFromFile(ContentInLevel.GAMEOBJECTSINLEVEL));
 
             //public static readonly LevelConfig LevelData = new LevelConfig("Content/Map.txt", defaultLevelStartPosition);
         }

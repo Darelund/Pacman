@@ -38,7 +38,7 @@ namespace Pacman
                 player.GettingTeleported();
                 //Also rotate it
             }
-            Debug.WriteLine("Player");
+         //   Debug.WriteLine("Player");
         }
 
         public override void Update(GameTime gameTime)

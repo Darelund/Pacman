@@ -65,7 +65,6 @@ namespace Pacman
                     // Level.Update(gameTime);
                     LevelManager.GetCurrentLevel.Update(gameTime);
                     UIManager.Update(gameTime);
-                    Debug.WriteLine("Am I still here?");
                     foreach (var gameObject in GameObjects)
                     {
                         gameObject.Update(gameTime);

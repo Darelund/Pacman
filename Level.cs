@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SharpDX.Direct2D1.Effects;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -52,60 +53,53 @@ namespace Pacman
             {
                 for (int j = 0; j < result[0].Length; j++)
                 {
+                    //Check if a specific tile was found, otherwise create a default one
+                    bool tileFound = false;
                     foreach (var tileConfig in tileConfigurations)
                     {
                         if (result[i][j] == tileConfig.TileName)
                         {
                             _tiles[j, i] = new Tile(new Vector2(TileSize.X * j + _startPosition.X, TileSize.Y * i + _startPosition.Y), tileConfig.tileTexture, tileConfig.type, tileConfig.tileColor, tileConfig.TileName);
+                          tileFound = true;
                             break;
                         }
-                        else
-                        {
-                            //Default - Path
-                            string defaultTextureString = "empty";
-                            TileType defaultTileType = TileType.Path;
-                            Color defaultColor = Color.White;
-                            char defaultName = 'p';
-                            _tiles[j, i] = new Tile(new Vector2(TileSize.X * j + _startPosition.X, TileSize.Y * i + _startPosition.Y), ResourceManager.GetTexture(defaultTextureString), defaultTileType, defaultColor, defaultName);
-                        }
+                    }
+                    if (!tileFound)
+                    {
+                        //Default - Path
+                        string defaultTextureString = "empty";
+                        TileType defaultTileType = TileType.Path;
+                        Color defaultColor = Color.White;
+                        char defaultName = 'p';
+                        _tiles[j, i] = new Tile(new Vector2(TileSize.X * j + _startPosition.X, TileSize.Y * i + _startPosition.Y), ResourceManager.GetTexture(defaultTextureString), defaultTileType, defaultColor, defaultName);
 
                         foreach (char GameObjectName in GameObjectConfigurations)
                         {
-                              
+
                             if (result[i][j] == GameObjectName)
                             {
                                 var startPos = new Vector2(TileSize.X * j + _startPosition.X, TileSize.Y * i + _startPosition.Y);
                                 (char Type, Vector2 StartPos) Data = (GameObjectName, startPos);
-                               // GameObjectsInLevel.Add(_factory.CreateGameObjectFromType(Data));
+                                // GameObjectsInLevel.Add(_factory.CreateGameObjectFromType(Data));
                                 GameManager.GameObjects.Add(_factory.CreateGameObjectFromType(Data));
+
+                                if (LevelManager.LevelIndex >= 1 && GameManager.GameObjects.Count >= 17)
+                                {
+                                    Debug.WriteLine(GameManager.GameObjects.Count);
+                                }
+
                                 break;
                             }
-                            //if (result[i][j] == GameObjectName)
-                            //{
-                            //    //Create a player
-                            //    break;
-                            //}
-                            //if (result[i][j] == GameObjectName)
-                            //{
-                            //    //Create an enemy
-                            //    break;
-                            //}
-                            //if (result[i][j] == GameObjectName)
-                            //{
-                            //    //Create a pickup
-                            //    break;
-                            //}
                         }
-
                     }
                 }
             }
-            //WELL THIS NEEDS TO BE FIXED SOMEHOW.
+            Debug.WriteLine(GameManager.GameObjects.Count);
             foreach (Teleport teleport in GameManager.GameObjects.FindAll(obj => obj.GetType() == typeof(Teleport)).ToList())
             {
                 //Find the teleports array location 
                 var location = GetTileAtPosition(teleport.Position);
-                Debug.WriteLine($"X: {location.X} Y: {location.Y}");
+              //  Debug.WriteLine($"X: {location.X} Y: {location.Y}");
 
                 string tileKey = string.Empty;
                 (int y, int x)[] directions = { (-1, 0), (0, 1), (1, 0), (0, -1) };
@@ -133,12 +127,12 @@ namespace Pacman
                     "0001" => new Vector2(-1, 0),
                     _ => new Vector2(0, 1)
                 };
-                Debug.WriteLine(tileKey);
+              //  Debug.WriteLine(tileKey);
                 float maxDistance = 0;
                 int tileToPick = 0;
                 char teleportLocation = 't';
-
-                Debug.WriteLine(teleportDirection);
+                Tile tile;
+               // Debug.WriteLine(teleportDirection);
                 //This part
                 if(teleportDirection.X != 0)
                 {
@@ -152,11 +146,8 @@ namespace Pacman
                             tileToPick = i;
                         }
                     }
-                    var tile = _tiles[tileToPick, location.Y];
-                    tile.Type = TileType.Path;
-                    tile.SwitchTile(ResourceManager.GetTexture("empty"));
-
-                    teleport.SetPosition(tile.Pos);
+                    tile = _tiles[tileToPick, location.Y];
+                   
 
                 }
                 else
@@ -169,21 +160,16 @@ namespace Pacman
                         {
                             maxDistance = Vector2.Distance(location.ToVector2(), new Vector2(location.X, i));
                             tileToPick = i;
-                            Debug.WriteLine(i);
+                           // Debug.WriteLine(i);
                         }
                     }
-                    var tile = _tiles[location.X, tileToPick];
-                    tile.Type = TileType.Path;
-                    tile.SwitchTile(ResourceManager.GetTexture("empty"));
-                    teleport.SetPosition(tile.Pos);
+                    tile = _tiles[location.X, tileToPick];
+                   
                 }
-               
-                //Find the furthest point
+                tile.Type = TileType.Path;
+                tile.SwitchTile(ResourceManager.GetTexture("empty"));
+                teleport.SetPosition(tile.Pos);
             }
-            //Debug.WriteLine(GameManager.GameObjects.Count);
-          //  GameManager.GameObjects.AddRange(GameObjectsInLevel);
-           // ItemsInLevel = (GameManager.GameObjects.FindAll(obj => obj.GetType() == typeof(Item))).ToList();
-           // Debug.WriteLine(GameManager.GameObjects.Count);
         }
 
         public virtual bool IsLevelCompleted()

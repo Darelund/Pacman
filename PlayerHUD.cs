@@ -36,7 +36,7 @@ namespace Pacman
                 _lifeImage.Draw(spriteBatch, heartPosition);
             }
             _scoreText.Draw(spriteBatch);
-            Debug.WriteLine(hearts);
+            //Debug.WriteLine(hearts);
         }
         public void Update(GameTime gameTime)
         {

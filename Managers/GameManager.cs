@@ -76,15 +76,12 @@ namespace Pacman
                     break;
                 case GameState.Playing:
                     InputManager.Update();
+                    TileEditor.Update();
                     UIManager.Update(gameTime);
                     LevelManager.GetCurrentLevel.Update(gameTime);
                     // Level.Update(gameTime);
                     for (int i = 0; i < GameObjects.Count; i++)
                     {
-                        GameObjects[i].Update(gameTime);
-
-                        //Sometimes it goes outside of bounds, but how? Why would i be one more than it should be?
-                        //If GameObject.Count is 26 then i shouldn't be able to be 26, so why? I think it only happens when I destroy walls? But this shouldn't have anything to do with that
                         if (GameObjects[i] is PlayerController)
                         {
                             var player = GameObjects[i] as PlayerController;
@@ -98,25 +95,8 @@ namespace Pacman
                                 OnWin?.Invoke(Color.Green, GameState.Victory);
                             }
                         }
+                        GameObjects[i].Update(gameTime);
                     }
-                    //foreach (var gameObject in GameObjects)
-                    //{
-                    //    gameObject.Update(gameTime);
-
-                    //    if (gameObject is PlayerController)
-                    //    {
-                    //        var player = gameObject as PlayerController;
-                    //        if (player.Health <= 0)
-                    //        {
-                    //            OnGameOver?.Invoke(Color.Black, GameState.GameOver);
-                    //        }
-
-                    //        if (LevelManager.GetCurrentLevel.IsLevelCompleted())
-                    //        {
-                    //            OnWin?.Invoke(Color.Green, GameState.Victory);
-                    //        }
-                    //    }
-                    //}
                     for (int i = 0; i < _flashEffects.Count; i++)
                     {
                         if (!_flashEffects[i].IsActive)
@@ -166,6 +146,7 @@ namespace Pacman
 
                   //  Level.Draw(spriteBatch);
                     UIManager.Draw(spriteBatch);
+                    TileEditor.Draw(spriteBatch);
 
                     foreach (var gameObject in GameObjects)
                     {

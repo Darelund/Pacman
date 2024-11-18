@@ -15,6 +15,9 @@ namespace Pacman
 
         public static KeyboardState CurrentKeyboard => keyboardState;
         public static KeyboardState PreviousKeyboard => previousKeyboardState;
+
+        public static MouseState CurrentMouse => mouseState;
+        public static MouseState PreviousMouse => previousMouseState;
         public static void Update()
         {
             previousMouseState = mouseState;

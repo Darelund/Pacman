@@ -82,12 +82,6 @@ namespace Pacman
                                 (char Type, Vector2 StartPos) Data = (GameObjectName, startPos);
                                 // GameObjectsInLevel.Add(_factory.CreateGameObjectFromType(Data));
                                 GameManager.GameObjects.Add(_factory.CreateGameObjectFromType(Data));
-
-                                if (LevelManager.LevelIndex >= 1 && GameManager.GameObjects.Count >= 17)
-                                {
-                                    Debug.WriteLine(GameManager.GameObjects.Count);
-                                }
-
                                 break;
                             }
                         }
@@ -255,7 +249,6 @@ namespace Pacman
                             "DarkGreen" => Color.DarkGreen,
                             _ => Color.White // Default color if not found
                         };
-                        Debug.WriteLine(color.ToString());
                         // Add the tile to the list, converting the texture name to a Texture2D object
                         tileData.Add((tileName, ResourceManager.GetTexture(textureName), type, color));
                     }
@@ -296,7 +289,7 @@ namespace Pacman
 
         //    return !(_tiles[tilePos.X, tilePos.Y].Type == TileType.NonWalkable);
         //}
-        public bool IsTileWall(Vector2 position, Vector2 dir)
+        public bool IsTileWall(Vector2 position, Vector2 dir, GameObject gameObject)
         {
             Point tilePos = GetTileAtPosition(position);
 
@@ -314,7 +307,7 @@ namespace Pacman
                 return false;
             }
 
-            if(PlayerController.Instance.PlayerState == PlayerState.Attacking)
+            if(gameObject is PlayerController && PlayerController.Instance.PlayerState == PlayerState.Attacking)
             {
                 bool isWall = (_tiles[tilePos.X, tilePos.Y].Type == TileType.Wall);
                 if(isWall)

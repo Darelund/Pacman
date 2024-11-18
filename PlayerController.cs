@@ -65,7 +65,7 @@ namespace Pacman
                 if (newDirection.Length() != 0)
                     direction = newDirection;
 
-                if (!LevelManager.GetCurrentLevel.IsTileWall(Position, direction))
+                if (!LevelManager.GetCurrentLevel.IsTileWall(Position, direction, this))
                 {
                     var newDestination = Position + (direction * Level.TileSize);
                     destination = newDestination;
@@ -99,7 +99,7 @@ namespace Pacman
            
 
             direction = InputManager.GetMovement();
-            if (LevelManager.GetCurrentLevel.IsTileWall(Position, direction))
+            if (LevelManager.GetCurrentLevel.IsTileWall(Position, direction, this))
             {
                 direction = Vector2.Zero;
                 //Not necessary but makes the code clearer

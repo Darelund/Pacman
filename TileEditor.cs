@@ -30,42 +30,5 @@ namespace Pacman
             { "1011", new Rectangle(66, 99, 32, 32) },
             { "1111", new Rectangle(99, 99, 32, 32) }
         };
-
-        public static string GetTileKey(Tile[,] tiles, Point tilePosition)
-        {
-            string tileKey = string.Empty;
-            (int y, int x)[] directions = { (-1, 0), (0, 1), (1, 0), (0, -1) };
-
-            foreach (var (y, x) in directions)
-            {
-                int newY = tilePosition.Y + y;
-                int newX = tilePosition.X + x;
-
-              //  tileKey += GameIsTileWall(tiles, new(newX, newY)) ? "0" : "1";
-            }
-            return tileKey;
-        }
-        TileType TileType;
-        Texture2D Texture;
-        Vector2 Position;
-        Point TileSize = new Point(40, 40);
-        Tile[,] Tiles = new Tile[5, 6];
-
-
-        public void Draw(SpriteBatch spriteBatch, Level level)
-        {
-            if (TileType == TileType.Path)
-                return;
-
-            rectMap.TryGetValue(GetTileKey(Tiles, (Position / TileSize.ToVector2()).ToPoint()), out Rectangle sourceRect);
-
-            spriteBatch.Draw(Texture, new Rectangle(Position.ToPoint(), new Point(TileSize.X, TileSize.Y)), sourceRect, Color.White);
-
-            //if (TileType == TileType.Empty)
-            //    return;
-            //AnimationRects.rectMap.TryGetValue(LevelManager.GetTileKey(level.Tiles, (Position / level.TileSize).ToPoint()), out Rectangle sourceRect);
-            //spriteBatch.Draw(Texture, new Rectangle(Position.ToPoint(), new Point(LevelManager.TileSize)), sourceRect, Color.White);
-        }
-
     }
 }

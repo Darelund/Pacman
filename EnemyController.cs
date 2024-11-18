@@ -59,6 +59,7 @@ namespace Pacman
                     moving = false;
                 }
             }
+            base.Update(gameTime);
         }
         public override void Draw(SpriteBatch spriteBatch)
         {

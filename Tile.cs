@@ -11,6 +11,7 @@ namespace Pacman
     public enum TileType
     {
         Wall,
+        Unbreakable,
         Path
     }
     public class Tile
@@ -36,7 +37,7 @@ namespace Pacman
         }
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            if(Type == TileType.Wall)
+            if(Type == TileType.Wall || Type == TileType.Unbreakable)
             {
                 TileEditor.rectMap.TryGetValue(LevelManager.GetCurrentLevel.GetTileKey(Pos.ToPoint()), out Rectangle sourceRect);
 

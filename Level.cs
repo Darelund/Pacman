@@ -250,11 +250,12 @@ namespace Pacman
                             "White" => Color.White,
                             "Red" => Color.Red,
                             "Brown" => Color.Brown,
-                            "Blue" => Color.Blue,
+                            "Blue" => Color.LightPink,
                             "Green" => Color.Green,
                             "DarkGreen" => Color.DarkGreen,
                             _ => Color.White // Default color if not found
                         };
+                        Debug.WriteLine(color.ToString());
                         // Add the tile to the list, converting the texture name to a Texture2D object
                         tileData.Add((tileName, ResourceManager.GetTexture(textureName), type, color));
                     }
@@ -295,7 +296,6 @@ namespace Pacman
 
         //    return !(_tiles[tilePos.X, tilePos.Y].Type == TileType.NonWalkable);
         //}
-
         public bool IsTileWall(Vector2 position, Vector2 dir)
         {
             Point tilePos = GetTileAtPosition(position);
@@ -314,7 +314,23 @@ namespace Pacman
                 return false;
             }
 
-            return (_tiles[tilePos.X, tilePos.Y].Type == TileType.Wall);
+            if(PlayerController.Instance.PlayerState == PlayerState.Attacking)
+            {
+                bool isWall = (_tiles[tilePos.X, tilePos.Y].Type == TileType.Wall);
+                if(isWall)
+                {
+                    var tile = _tiles[tilePos.X, tilePos.Y];
+                    Texture2D pathTexture = ResourceManager.GetTexture("empty");
+                    TileType pathTileType = TileType.Path;
+                    char pathName = 'p';
+
+                    tile.SwitchTile(pathTexture);
+                    tile.Type = pathTileType;
+                    tile.Name = pathName;
+                }
+            }
+
+            return (_tiles[tilePos.X, tilePos.Y].Type == TileType.Wall) || (_tiles[tilePos.X, tilePos.Y].Type == TileType.Unbreakable);
         }
         private Point GetTileAtPosition(Vector2 vec)
         {
@@ -347,7 +363,7 @@ namespace Pacman
                     tileKey += "0";
                     continue;
                 }
-                tileKey += (_tiles[newX, newY].Type == TileType.Path) ? "0" : "1";
+                tileKey += (_tiles[newX, newY].Type == TileType.Path) || (_tiles[newX, newY].Type == TileType.Unbreakable) ? "0" : "1";
             }
             return tileKey;
         }

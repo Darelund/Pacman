@@ -15,9 +15,9 @@ namespace Pacman
         {
             switch (data.ObjectType)
             {
-                //case "E":
-                //    Debug.WriteLine("An enemy is created(Factory)");
-                //    return CreateEnemyController(objectData);
+                case 'E':
+                    Debug.WriteLine("An enemy is created(Factory)");
+                    return CreateEnemyController(data.Position);
                 case 'P':
                     return CreatePlayerController(data.Position);
                 case 'C':
@@ -172,65 +172,70 @@ namespace Pacman
 
         private EnemyController CreateEnemyController(Vector2 data)
         {
-            string sprite = "pacman_white";
+            string sprite = "ghost";
             //Offset because character is bigger than tiles
-            Vector2 positionOffset = new Vector2(14.5f, 14.5f);
+            Vector2 positionOffset = new Vector2(16, 16);
             Vector2 position = data + positionOffset;
 
             //float speed = float.Parse(data[2]);
-            string colorName = GameFiles.Character.CHARACTERCOLOR;
-            Color color = colorName switch
-            {
-                "white" => Color.White,
-                "yellow" => Color.Yellow,
-                "red" => Color.Red,
-                "blue" => Color.Blue,
-                "green" => Color.Green,
-                "pink" => Color.HotPink,
-                _ => Color.White
-            };
+            Color color = Color.White;
+           
             float rotation = 0;
-            float size = 0.6f;
+            float size = 2f;
             float layerDepth = 0;
 
 
-            Vector2 origin = new Vector2(19.5f, 19.5f);
+            Vector2 origin = new Vector2(8f, 8f);
+
+            Random randomAnimation = new Random();
+            int animationToPick = randomAnimation.Next(1, 5);
+
+            int yAnimationOffset = 16 * animationToPick;
+            int xAnimationOffset = 16;
 
             Rectangle[] enemyRoaming =
              {
-                new Rectangle(0, 0, 39, 39),
-                new Rectangle(40, 0, 39, 39),
-                new Rectangle(80, 0, 39, 39),
-                new Rectangle(120, 0, 39, 39)
+                new Rectangle(xAnimationOffset * 0, yAnimationOffset , 16, 16),
+                new Rectangle(xAnimationOffset * 1, yAnimationOffset, 16, 16),
+                new Rectangle(xAnimationOffset * 2, yAnimationOffset, 16, 16),
+                new Rectangle(xAnimationOffset * 3, yAnimationOffset, 16, 16),
+                new Rectangle(xAnimationOffset * 4, yAnimationOffset, 16, 16),
+                new Rectangle(xAnimationOffset * 5, yAnimationOffset, 16, 16),
+                new Rectangle(xAnimationOffset * 6, yAnimationOffset, 16, 16),
+                new Rectangle(xAnimationOffset * 7, yAnimationOffset, 16, 16)
             };
-            Rectangle[] enemyChasing =
+            //Rectangle[] enemyChasing =
+            // {
+            //    new Rectangle(0, 0, 39, 39),
+            //    new Rectangle(40, 0, 39, 39),
+            //    new Rectangle(80, 0, 39, 39),
+            //    new Rectangle(120, 0, 39, 39)
+            //};
+            Rectangle[] enemyFleeingStage1 =
              {
-                new Rectangle(0, 0, 39, 39),
-                new Rectangle(40, 0, 39, 39),
-                new Rectangle(80, 0, 39, 39),
-                new Rectangle(120, 0, 39, 39)
+                new Rectangle(xAnimationOffset * 0, 16 * 5, 16, 16),
+                new Rectangle(xAnimationOffset * 1, 16 * 5, 16, 16),
             };
-            Rectangle[] enemyFleeing =
-             {
-                new Rectangle(0, 0, 39, 39),
-                new Rectangle(40, 0, 39, 39),
-                new Rectangle(80, 0, 39, 39),
-                new Rectangle(120, 0, 39, 39)
+            Rectangle[] enemyFleeingStage2 =
+            {
+                new Rectangle(xAnimationOffset * 2, 16 * 5, 16, 16),
+                new Rectangle(xAnimationOffset * 3, 16 * 5, 16, 16),
             };
             Rectangle[] enemyDead =
              {
-                new Rectangle(0, 0, 39, 39),
-                new Rectangle(40, 0, 39, 39),
-                new Rectangle(80, 0, 39, 39),
-                new Rectangle(120, 0, 39, 39)
+                new Rectangle(xAnimationOffset * 4, 16 * 5, 16, 16),
+                new Rectangle(xAnimationOffset * 5, 16 * 5, 16, 16),
+                new Rectangle(xAnimationOffset * 6, 16 * 5, 16, 16),
+                new Rectangle(xAnimationOffset * 7, 16 * 5, 16, 16),
             };
 
             Dictionary<string, AnimationClip> animationClips = new Dictionary<string, AnimationClip>()
             {
-                {"Roaming",  new AnimationClip(enemyRoaming, 7f)},
-                {"Chasing",  new AnimationClip(enemyRoaming, 7f)},
-                {"Fleeing",  new AnimationClip(enemyRoaming, 7f)},
-                {"Dead",  new AnimationClip(enemyRoaming, 7f)},
+                {"Roaming",  new AnimationClip(enemyRoaming, 3f)},
+               // {"Chasing",  new AnimationClip(enemyRoaming, 7f)},
+                {"Fleeing1",  new AnimationClip(enemyFleeingStage1, 10f)},
+                {"Fleeing2",  new AnimationClip(enemyFleeingStage2, 10f)},
+                {"Dead",  new AnimationClip(enemyDead, 7f)},
             };
 
             return new EnemyController(
@@ -353,7 +358,7 @@ namespace Pacman
 
             int ranItem = ran.Next(0, 101);
 
-            if(ranItem >= 0 && ranItem < 50)
+            if(ranItem >= 0 && ranItem < 75)
             {
                 return new Candy(
                     ResourceManager.GetTexture(sprite),
@@ -366,7 +371,7 @@ namespace Pacman
                     origin
                 );
             }
-            else if (ranItem >= 50 && ranItem < 70)
+            else if (ranItem >= 75 && ranItem < 85)
             {
                 return new Consumble(
                    ResourceManager.GetTexture(sprite),
@@ -379,7 +384,7 @@ namespace Pacman
                    origin
                );
             }
-            else if (ranItem >= 70 && ranItem < 90)
+            else if (ranItem >= 85 && ranItem < 90)
             {
                 return new Wearable(
                     ResourceManager.GetTexture(sprite),

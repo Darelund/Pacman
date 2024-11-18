@@ -22,12 +22,13 @@ namespace Pacman
         private Vector2 destination;
         bool moving = false;
 
-        private float _health = 3;
+        private float _maxHealth = 3;
+        private float _currentHealth;
         public float Health
         {
-            get => _health;
+            get => _currentHealth;
         }
-        public bool IsImmune { get; private set; } = false;
+        public bool IsImmune { get; set; } = false;
         private bool _inAttackMode = false;
         private bool _isActive = true;
         private float _speed = 50;
@@ -49,11 +50,13 @@ namespace Pacman
         }
         public PlayerController(Texture2D texture, Vector2 position, Color color, float rotation, float size, float layerDepth, Vector2 origin, Dictionary<string, AnimationClip> animationClips) : base(texture, position, color, rotation, size, layerDepth, origin, animationClips)
         {
+            _currentHealth = _maxHealth;
             _instance = this;
         }
 
         public override void Update(GameTime gameTime)
         {
+            if (!_isActive) return;
 
             if (!moving)
             {
@@ -77,11 +80,10 @@ namespace Pacman
                     Position = destination;
                     moving = false;
                 }
-                //Debug.WriteLine(destination);
 
                 if(InputManager.DebugButton())
                 {
-                    TakeDamage(3);
+                    TakeDamage(1);
                 }
             }
 
@@ -142,8 +144,8 @@ namespace Pacman
         {
             //Maybe add thís back later
             // if(!IsImmune)
-            _health -= amount;
-            if (_health <= 0)
+            _currentHealth -= amount;
+            if (_currentHealth <= 0)
             {
                 _isActive = false;
                 HighScore.UpdateScore(GameManager.Name, ScoreManager.PlayerScore, LevelManager.LevelIndex);
@@ -156,12 +158,19 @@ namespace Pacman
 
                 AudioManager.PlaySoundEffect(deathSound);
             }
-            Debug.WriteLine(_health);
+            Debug.WriteLine(_currentHealth);
+        }
+        public void RecieveHealth(int amount)
+        {
+            if(_currentHealth < _maxHealth)
+            {
+                _currentHealth += amount;
+            }
         }
         public override void OnCollision(GameObject gameObject)
         {
             if (!_isActive) return;
-            if (gameObject is EnemyController)
+            if (gameObject is EnemyController && PlayerState == PlayerState.Walking)
             {
                 // var enemsy = (EnemyController)gameObject;
                 if (!IsImmune)

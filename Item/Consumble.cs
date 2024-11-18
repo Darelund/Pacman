@@ -19,18 +19,16 @@ namespace Pacman
         }
         public override void OnCollision(GameObject gameObject)
         {
-            //Maybe add it back to a pool and respawn it
             if (gameObject is PlayerController)
             {
-                //This finns det någon sak i listan som har samma reference som this, om, remove
+                var player = (PlayerController)gameObject;
+                int healthToGive = 1;
+                player.RecieveHealth(healthToGive);
+
                 GameManager.GameObjects.Remove(this);
                 ScoreManager.UpdateScore(_score);
-                int resetRotation = 0;
-                Rotation = resetRotation;
                 AudioManager.PlaySoundEffect("CoinPickupSound");
-                Debug.WriteLine("Consumable");
             }
-            // GameManager.GameObjects.Remove(this);
         }
         public override void Update(GameTime gameTime)
         {

@@ -12,9 +12,11 @@ namespace Pacman
     public class Wearable : Item
     {
         public ItemState state { get; private set; } = ItemState.pickupState;
-        protected float _lifeTimeDuration = 5f;
+        protected float _lifeTimeDuration = 3f;
         protected float _remainingTimeLeft = 0;
-        public event Action<Item> OnExpired;
+
+        private PlayerController _target;
+        private Vector2 _targetOffset = new Vector2(0, -20);
 
         public Wearable(Texture2D texture, Vector2 position, Rectangle rect, Color color, float rotation, float size, float layerDepth, Vector2 origin) : base(texture, position, rect, color, rotation, size, layerDepth, origin)
         {
@@ -26,17 +28,26 @@ namespace Pacman
         }
         public override void OnCollision(GameObject gameObject)
         {
-            //Maybe add it back to a pool and respawn it
+            if (state == ItemState.usingState) return;
+
             if (gameObject is PlayerController)
             {
-                GameManager.GameObjects.Remove(this);
+                _target = (PlayerController)gameObject;
+
+                Color flashColor = Color.White;
+                var flash = new FlashEffect(ResourceManager.GetEffect("FlashEffect"), _lifeTimeDuration, _target, flashColor);
+                GameManager.AddFlashEffect(flash);
+                _target.IsImmune = true;
+                flash.OnFlashing += _target.ImmuneHandler;
+
                 state = ItemState.usingState;
-                ScoreManager.UpdateScore(_score);
+
+                ScoreManager.UpdateScore(_score);             
+                AudioManager.PlaySoundEffect("CoinPickupSound");
+
                 int resetRotation = 0;
                 Rotation = resetRotation;
-                AudioManager.PlaySoundEffect("CoinPickupSound");
             }
-            // GameManager.GameObjects.Remove(this);
         }
         public override void Update(GameTime gameTime)
         {
@@ -44,11 +55,12 @@ namespace Pacman
                 Rotation += (float)gameTime.ElapsedGameTime.TotalSeconds;
             else
             {
+                Position = _target.Position + _targetOffset;
+
                 _remainingTimeLeft -= (float)gameTime.ElapsedGameTime.TotalSeconds;
                 if (_remainingTimeLeft <= 0)
                 {
-                    Debug.WriteLine("Item expired");
-                    OnExpired?.Invoke(this);
+                    GameManager.GameObjects.Remove(this);
                 }
             }
         }

@@ -1,0 +1,3 @@
+w tiles Wall White
+u tiles Unbreakable Blue
+t tiles Path white

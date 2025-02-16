@@ -1,0 +1,16 @@
+w tiles Wall White 0000
+w tiles Wall White 0100
+w tiles Wall White 1000
+w tiles Wall White 1100
+w tiles Wall White 0001
+w tiles Wall White 0101
+w tiles Wall White 1001
+w tiles Wall White 1101
+w tiles Wall White 0010
+w tiles Wall White 0110
+w tiles Wall White 1010
+w tiles Wall White 1110
+w tiles Wall White 0011
+w tiles Wall White 0111
+w tiles Wall White 1011
+w tiles Wall White 1111
